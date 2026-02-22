@@ -5,6 +5,7 @@ import Day2 from './components/Day2';
 import Day3 from './components/Day3';
 import Day4 from './components/Day4';
 import { AppRoute } from './types';
+import { AdminProvider } from './contexts/AdminContext';
 
 const App: React.FC = () => {
   const [route, setRoute] = useState<AppRoute>(AppRoute.HOME);
@@ -27,9 +28,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="app-container">
-      {renderContent()}
-    </div>
+    <AdminProvider>
+      <div className="app-container">
+        {renderContent()}
+      </div>
+    </AdminProvider>
   );
 };
 

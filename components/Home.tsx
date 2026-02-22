@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import { AppRoute } from '../types';
 import { COLORS } from '../constants';
+import { isDayUnlocked, getUnlockLabel, getTimeUntilUnlock } from '../utils/unlockSystem';
+import { useAdmin } from '../contexts/AdminContext';
 
 interface HomeProps {
   setRoute: (route: AppRoute) => void;
 }
 
 const Home: React.FC<HomeProps> = ({ setRoute }) => {
+  const { isAdmin } = useAdmin();
+  const [, setTick] = useState(0);
+
+  // Update countdown every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => setTick(t => t + 1), 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const days = [
     {
@@ -58,34 +68,79 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
           </p>
         </div>
 
+        {/* Admin Badge */}
+        {isAdmin && (
+          <div className="mb-4 px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold border border-amber-300">
+            Modo Admin — Todos los días desbloqueados
+          </div>
+        )}
+
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-5xl mb-12 md:mb-16 px-2 md:px-4">
-          {days.map((day, idx) => (
-            <button key={day.id} onClick={() => setRoute(day.id)}
-              className="group relative overflow-hidden rounded-3xl p-6 md:p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 bg-white/80 backdrop-blur-md border border-white/50 shadow-lg"
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
-              {/* Gradient background on hover */}
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-gradient-to-br ${day.color}`} />
+          {days.map((day, idx) => {
+            const unlocked = isDayUnlocked(day.id, isAdmin);
 
-              <div className="flex items-start justify-between mb-4 md:mb-6 relative z-10">
-                <span className="text-4xl md:text-5xl filter drop-shadow-sm">{day.icon}</span>
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-slate-50 text-slate-300 group-hover:text-white transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-12 shadow-inner" style={{ backgroundColor: 'rgba(36, 63, 76, 0.05)' }}>
-                   {/* Arrow Icon */}
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6 group-hover:stroke-[#FF2878]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
+            return (
+              <button key={day.id}
+                onClick={() => unlocked && setRoute(day.id)}
+                disabled={!unlocked}
+                className={`group relative overflow-hidden rounded-3xl p-6 md:p-8 text-left transition-all duration-300 bg-white/80 backdrop-blur-md border shadow-lg ${
+                  unlocked
+                    ? 'border-white/50 hover:shadow-2xl hover:-translate-y-2 cursor-pointer'
+                    : 'border-slate-200 opacity-60 grayscale cursor-not-allowed'
+                }`}
+                style={{ animationDelay: `${idx * 100}ms` }}
+              >
+                {/* Gradient background on hover (only when unlocked) */}
+                {unlocked && (
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500 bg-gradient-to-br ${day.color}`} />
+                )}
+
+                {/* Lock overlay for locked days */}
+                {!unlocked && (
+                  <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-slate-800/80 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    {getUnlockLabel(day.id)}
+                  </div>
+                )}
+
+                <div className="flex items-start justify-between mb-4 md:mb-6 relative z-10">
+                  <span className="text-4xl md:text-5xl filter drop-shadow-sm">{day.icon}</span>
+                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-slate-50 transition-all duration-300 transform shadow-inner ${
+                    unlocked
+                      ? 'text-slate-300 group-hover:text-white group-hover:scale-110 group-hover:rotate-12'
+                      : 'text-slate-200'
+                  }`} style={{ backgroundColor: 'rgba(36, 63, 76, 0.05)' }}>
+                     {unlocked ? (
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6 group-hover:stroke-[#FF2878]">
+                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                       </svg>
+                     ) : (
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
+                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                       </svg>
+                     )}
+                  </div>
                 </div>
-              </div>
 
-              <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 text-slate-800 group-hover:text-[#243F4C] transition-colors relative z-10">
-                {day.title}
-              </h2>
-              <p className="text-slate-500 text-base md:text-lg relative z-10">
-                {day.desc}
-              </p>
-            </button>
-          ))}
+                <h2 className={`text-xl md:text-2xl font-bold mb-2 md:mb-3 transition-colors relative z-10 ${
+                  unlocked ? 'text-slate-800 group-hover:text-[#243F4C]' : 'text-slate-500'
+                }`}>
+                  {day.title}
+                </h2>
+                <p className="text-slate-500 text-base md:text-lg relative z-10">
+                  {unlocked ? day.desc : (
+                    <span className="flex items-center gap-2">
+                      <span>Disponible: {getUnlockLabel(day.id)}</span>
+                      <span className="text-sm text-slate-400">({getTimeUntilUnlock(day.id)})</span>
+                    </span>
+                  )}
+                </p>
+              </button>
+            );
+          })}
         </div>
 
         {/* Value Proposition Section */}
