@@ -52,6 +52,15 @@ const CTA_THRESHOLDS: Record<string, { interactions: InteractionType[]; threshol
   },
 };
 
+// ─── CTA Time Gate ──────────────────────────────────────────────────────
+// CTA popups only appear from Wednesday 25 Feb 2026 at 20:30 Madrid time
+// CET (winter) = UTC+1, so 20:30 Madrid = 19:30 UTC
+const CTA_UNLOCK_UTC = new Date(Date.UTC(2026, 1, 25, 19, 30, 0)); // Feb 25, 2026 20:30 CET
+
+function isCTATimeUnlocked(): boolean {
+  return new Date() >= CTA_UNLOCK_UTC;
+}
+
 // ─── Storage Keys ───────────────────────────────────────────────────────
 const STORAGE_KEY = 'ia-heroes-interactions';
 const CTA_SHOWN_KEY = 'ia-heroes-cta-shown';
@@ -115,8 +124,14 @@ export function trackInteraction(type: InteractionType): string | null {
     interaction_count: interactionCounts[type],
   });
 
+  // ── Gate: CTA popups never show before Wednesday 20:30 Madrid ──
+  if (!isCTATimeUnlocked()) return null;
+
   // Check if any section threshold is now met
   for (const [sectionKey, config] of Object.entries(CTA_THRESHOLDS)) {
+    // Day 1 never triggers CTA popups
+    if (sectionKey === 'day1') continue;
+
     // Skip if CTA already shown for this section
     if (ctaShownSections.has(sectionKey)) continue;
 
