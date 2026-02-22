@@ -1,1 +1,34 @@
 @import "tailwindcss";
+
+/* ─── Background Gradient Animations ─── */
+/* Adapted from aceternity/21st.dev BackgroundGradientAnimation */
+
+@theme {
+  --animate-grad-first: gradMoveVertical 30s ease infinite;
+  --animate-grad-second: gradMoveInCircle 20s reverse infinite;
+  --animate-grad-third: gradMoveInCircle 40s linear infinite;
+  --animate-grad-fourth: gradMoveHorizontal 40s ease infinite;
+  --animate-grad-fifth: gradMoveInCircle 20s ease infinite;
+}
+
+@keyframes gradMoveHorizontal {
+  0% { transform: translateX(-50%) translateY(-10%); }
+  50% { transform: translateX(50%) translateY(10%); }
+  100% { transform: translateX(-50%) translateY(-10%); }
+}
+
+@keyframes gradMoveInCircle {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes gradMoveVertical {
+  0% { transform: translateY(-50%); }
+  50% { transform: translateY(50%); }
+  100% { transform: translateY(-50%); }
+}
+
+/* Utility for scrollbar-hide on section pills */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
