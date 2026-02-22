@@ -1,49 +1,43 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import Layout from './Layout';
+import CTAModal from './CTAModal';
 import { AppRoute } from '../types';
-import { COLORS } from '../constants';
 import { CATALOG_AGENTS, DIFFICULTY_CONFIG, TAG_LIST, CatalogAgent, AgentCategory, Difficulty } from './agentCatalogData';
+import { trackInteraction, getCTAConfig, trackCTAClick, buildCTAUrl } from '../services/trackingService';
 
 interface AgentCatalogProps {
   setRoute: (route: AppRoute) => void;
 }
 
 // ─── Copy Button ────────────────────────────────────────────────────────
-const CopyButton = ({ text, variant = 'default' }: { text: string; variant?: 'default' | 'large' }) => {
+const CopyButton = ({ text, label = 'Copiar', copiedLabel = 'Copiado', className = '', onCopy }: { text: string; label?: string; copiedLabel?: string; className?: string; onCopy?: () => void }) => {
   const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
+    onCopy?.();
   };
-  const isLarge = variant === 'large';
   return (
     <button onClick={handleCopy}
       className={`inline-flex items-center gap-2 font-bold transition-all active:scale-95 ${
-        isLarge
-          ? 'py-3 px-6 rounded-xl text-base shadow-lg'
-          : 'py-2 px-4 rounded-lg text-sm'
-      } ${
-        copied
-          ? 'bg-emerald-500 text-white'
-          : isLarge
-            ? 'bg-[#FF2878] text-white hover:bg-[#e01b63] shadow-pink-200'
-            : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-      }`}
+        copied ? 'bg-emerald-500 text-white' : 'bg-[#FF2878] text-white hover:bg-[#e01b63]'
+      } ${className}`}
     >
       {copied ? (
         <>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
-          {isLarge ? 'Prompt Copiado' : 'Copiado'}
+          {copiedLabel}
         </>
       ) : (
         <>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
           </svg>
-          {isLarge ? 'Copiar System Prompt' : 'Copiar'}
+          {label}
         </>
       )}
     </button>
@@ -65,172 +59,171 @@ const DifficultyBadge = ({ difficulty }: { difficulty: Difficulty }) => {
   );
 };
 
-// ─── Agent Card ─────────────────────────────────────────────────────────
-const AgentCard = ({ agent, onClick, index }: { agent: CatalogAgent; onClick: () => void; index: number }) => {
+// ─── Flip Card ──────────────────────────────────────────────────────────
+const FlipCard = ({ agent, index, onInteraction }: { agent: CatalogAgent; index: number; onInteraction?: (type: 'flip' | 'copy') => void }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const backRef = useRef<HTMLDivElement>(null);
   const isWork = agent.category === 'work';
 
+  const handleFlip = useCallback(() => {
+    setIsFlipped(f => {
+      if (!f) onInteraction?.('flip');
+      return !f;
+    });
+  }, [onInteraction]);
+
+  // Reset scroll when flipping back
+  useEffect(() => {
+    if (!isFlipped && backRef.current) {
+      backRef.current.scrollTop = 0;
+    }
+  }, [isFlipped]);
+
   return (
-    <button
-      onClick={onClick}
-      className="group relative bg-white rounded-2xl p-5 text-left transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] border border-slate-100 hover:border-slate-200 overflow-hidden"
-      style={{ animationDelay: `${index * 40}ms` }}
+    <div
+      className="flip-card-container"
+      style={{ animationDelay: `${index * 50}ms` }}
     >
-      {/* Top gradient accent */}
-      <div className={`absolute top-0 left-0 right-0 h-1 ${isWork ? 'bg-gradient-to-r from-[#243F4C] to-blue-400' : 'bg-gradient-to-r from-[#FF2878] to-amber-400'}`} />
+      <div className={`flip-card-inner ${isFlipped ? 'flip-card-flipped' : ''}`}>
 
-      {/* Icon + Difficulty */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="text-3xl p-2 bg-slate-50 rounded-xl group-hover:scale-110 transition-transform duration-300">{agent.icon}</div>
-        <DifficultyBadge difficulty={agent.difficulty} />
-      </div>
+        {/* ───── FRONT SIDE ───── */}
+        <div className="flip-card-front" onClick={handleFlip}>
+          <div className="relative h-full bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-xl hover:border-slate-300 cursor-pointer group">
 
-      {/* Name */}
-      <h3 className="font-bold text-slate-800 text-base leading-tight mb-1.5 group-hover:text-[#243F4C] transition-colors">
-        {agent.name}
-      </h3>
+            {/* Top gradient accent */}
+            <div className={`h-1.5 w-full ${isWork ? 'bg-gradient-to-r from-[#243F4C] via-blue-500 to-cyan-400' : 'bg-gradient-to-r from-[#FF2878] via-pink-400 to-amber-400'}`} />
 
-      {/* Description */}
-      <p className="text-sm text-slate-500 leading-relaxed mb-3 line-clamp-2">{agent.description}</p>
+            {/* Card body */}
+            <div className="flex flex-col flex-1 p-5">
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {agent.tags.slice(0, 3).map(tag => (
-          <span key={tag} className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">{tag}</span>
-        ))}
-      </div>
-
-      {/* CTA */}
-      <div className="flex items-center gap-1.5 text-[#FF2878] font-bold text-sm group-hover:gap-2.5 transition-all">
-        <span>Ver prompt</span>
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-        </svg>
-      </div>
-    </button>
-  );
-};
-
-// ─── Agent Detail Modal ─────────────────────────────────────────────────
-const AgentDetailModal = ({ agent, onClose }: { agent: CatalogAgent | null; onClose: () => void }) => {
-  useEffect(() => {
-    if (agent) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = '';
-    return () => { document.body.style.overflow = ''; };
-  }, [agent]);
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [onClose]);
-
-  if (!agent) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-      <div
-        className="relative w-full sm:max-w-2xl max-h-[92vh] flex flex-col bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden"
-        style={{ animation: 'slideUp .3s cubic-bezier(0.16, 1, 0.3, 1)' }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex-shrink-0 p-5 pb-4 border-b border-slate-100 bg-gradient-to-br from-slate-50 to-white">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="text-4xl bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100">{agent.icon}</div>
-              <div>
-                <h3 className="font-bold text-xl text-slate-800">{agent.name}</h3>
-                <p className="text-sm text-slate-500 mt-0.5">{agent.longDescription}</p>
+              {/* Header row: Icon + badges */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="relative">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200/60 flex items-center justify-center text-3xl shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+                    {agent.icon}
+                  </div>
+                  {/* Subtle glow on hover */}
+                  <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl ${isWork ? 'bg-blue-400' : 'bg-pink-400'}`} />
+                </div>
+                <DifficultyBadge difficulty={agent.difficulty} />
               </div>
-            </div>
-            <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-400 hover:text-slate-600 flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
 
-          {/* Meta badges */}
-          <div className="flex items-center flex-wrap gap-2 mt-4">
-            <DifficultyBadge difficulty={agent.difficulty} />
-            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${agent.category === 'work' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'}`}>
-              {agent.category === 'work' ? 'Profesional' : 'Personal'}
-            </span>
-            {agent.tags.map(tag => (
-              <span key={tag} className="text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full bg-slate-100 text-slate-500">{tag}</span>
-            ))}
-          </div>
-        </div>
+              {/* Name */}
+              <h3 className="font-bold text-slate-800 text-lg leading-tight mb-2 group-hover:text-[#243F4C] transition-colors">
+                {agent.name}
+              </h3>
 
-        {/* Body — scrollable */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+              {/* Description */}
+              <p className="text-sm text-slate-500 leading-relaxed mb-4 line-clamp-2 flex-grow">{agent.description}</p>
 
-          {/* Use Cases */}
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
-            <h4 className="font-bold text-blue-900 text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-              Casos de uso
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {agent.useCases.map((uc, i) => (
-                <div key={i} className="flex items-start gap-2 text-sm text-blue-800">
-                  <span className="text-blue-400 mt-0.5 flex-shrink-0">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {agent.tags.slice(0, 3).map(tag => (
+                  <span key={tag} className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 text-slate-400 border border-slate-200/50">
+                    {tag}
                   </span>
-                  {uc}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* How to Use */}
-          <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-100">
-            <h4 className="font-bold text-emerald-900 text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Cómo usar este agente
-            </h4>
-            <div className="space-y-2.5">
-              {agent.howToUse.map((step, i) => (
-                <div key={i} className="flex items-start gap-3 text-sm text-emerald-800">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-200 text-emerald-700 flex items-center justify-center text-xs font-bold">{i + 1}</span>
-                  {step}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* System Prompt */}
-          <div className="bg-[#0F172A] rounded-2xl overflow-hidden border border-slate-700">
-            <div className="flex items-center justify-between px-4 py-3 bg-[#1e293b] border-b border-slate-700">
-              <div className="flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                <span className="ml-2 text-[10px] font-mono text-slate-400 uppercase tracking-widest">System Prompt</span>
+                ))}
               </div>
-              <CopyButton text={agent.systemPrompt} />
-            </div>
-            <div className="p-5 overflow-x-auto max-h-64">
-              <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap text-slate-200">{agent.systemPrompt}</pre>
-            </div>
-          </div>
 
-          {/* Large Copy CTA */}
-          <div className="text-center pt-2">
-            <CopyButton text={agent.systemPrompt} variant="large" />
+              {/* CTA row */}
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                <span className={`text-sm font-bold ${isWork ? 'text-[#243F4C]' : 'text-[#FF2878]'} group-hover:gap-2.5 transition-all flex items-center gap-1.5`}>
+                  Ver System Prompt
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </span>
+                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-slate-400 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Footer tip */}
-        <div className="flex-shrink-0 px-5 py-3 bg-amber-50 border-t border-amber-100">
-          <p className="text-xs text-amber-700 text-center">
-            <strong>Tip:</strong> Copia este prompt y pégalo como instrucciones del sistema en <strong>ChatGPT</strong>, <strong>Gemini</strong> o <strong>Claude</strong> para crear tu propio agente.
-          </p>
+        {/* ───── BACK SIDE ───── */}
+        <div className="flip-card-back">
+          <div className="relative h-full bg-[#0F172A] rounded-2xl border border-slate-700 overflow-hidden flex flex-col">
+
+            {/* Back header */}
+            <div className="flex-shrink-0 p-4 pb-3 border-b border-slate-700/80 bg-gradient-to-r from-[#1e293b] to-[#0f172a]">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="text-2xl flex-shrink-0">{agent.icon}</span>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-white text-base leading-tight truncate">{agent.name}</h3>
+                    <span className={`text-xs font-semibold ${isWork ? 'text-blue-400' : 'text-pink-400'}`}>
+                      {isWork ? 'Profesional' : 'Personal'}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={handleFlip}
+                  className="flex-shrink-0 p-2 rounded-xl hover:bg-white/10 transition-colors text-slate-400 hover:text-white"
+                  aria-label="Cerrar"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable content */}
+            <div ref={backRef} className="flex-1 overflow-y-auto p-4 space-y-3 flip-card-scroll">
+
+              {/* Description */}
+              <p className="text-slate-300 text-sm leading-relaxed">{agent.longDescription}</p>
+
+              {/* Use cases */}
+              <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Casos de uso</h4>
+                <div className="space-y-1.5">
+                  {agent.useCases.map((uc, i) => (
+                    <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
+                      <span className="text-emerald-400 mt-0.5 flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                      </span>
+                      <span>{uc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* System Prompt */}
+              <div className="bg-black/40 rounded-xl overflow-hidden border border-white/10">
+                <div className="flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/10">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="ml-2 text-[9px] font-mono text-slate-500 uppercase tracking-widest">System Prompt</span>
+                  </div>
+                </div>
+                <div className="p-3 max-h-40 overflow-y-auto flip-card-scroll">
+                  <pre className="font-mono text-[11px] leading-relaxed whitespace-pre-wrap text-slate-300">{agent.systemPrompt}</pre>
+                </div>
+              </div>
+            </div>
+
+            {/* Fixed bottom: Copy CTA */}
+            <div className="flex-shrink-0 p-3 border-t border-slate-700/80 bg-[#1e293b]">
+              <CopyButton
+                text={agent.systemPrompt}
+                label="Copiar System Prompt"
+                copiedLabel="Prompt Copiado"
+                className="w-full justify-center py-3 px-4 rounded-xl text-sm shadow-lg shadow-pink-500/20"
+                onCopy={() => onInteraction?.('copy')}
+              />
+              <p className="text-[10px] text-slate-500 text-center mt-2">
+                Pega en ChatGPT, Claude o Gemini como instrucciones del sistema
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -243,8 +236,22 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
   const [categoryFilter, setCategoryFilter] = useState<'all' | AgentCategory>('all');
   const [difficultyFilter, setDifficultyFilter] = useState<'all' | Difficulty>('all');
   const [tagFilter, setTagFilter] = useState<string | null>(null);
-  const [selectedAgent, setSelectedAgent] = useState<CatalogAgent | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [ctaOpen, setCTAOpen] = useState(false);
+  const [ctaConfig, setCTAConfig] = useState<{ title: string; message: string; url: string } | null>(null);
+
+  const handleInteraction = useCallback((type: 'flip' | 'copy') => {
+    const interactionType = type === 'copy' ? 'agents_prompt_copy' : 'agents_card_flip';
+    const triggerSection = trackInteraction(interactionType);
+    if (triggerSection) {
+      const config = getCTAConfig(triggerSection);
+      if (config) {
+        setCTAConfig(config);
+        // Small delay so the flip animation finishes first
+        setTimeout(() => setCTAOpen(true), 800);
+      }
+    }
+  }, []);
 
   // Filtered agents
   const filteredAgents = useMemo(() => {
@@ -283,13 +290,19 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
 
   const hasFilters = search || categoryFilter !== 'all' || difficultyFilter !== 'all' || tagFilter;
 
-  const workCount = filteredAgents.filter(a => a.category === 'work').length;
-  const personalCount = filteredAgents.filter(a => a.category === 'personal').length;
+  const workAgents = filteredAgents.filter(a => a.category === 'work');
+  const personalAgents = filteredAgents.filter(a => a.category === 'personal');
 
   return (
     <Layout title="Tu Ejército de Agentes IA" onBack={() => setRoute(AppRoute.HOME)}>
-      <AgentDetailModal agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
-
+      <CTAModal
+        isOpen={ctaOpen}
+        onClose={() => setCTAOpen(false)}
+        title={ctaConfig?.title}
+        message={ctaConfig?.message}
+        ctaUrl={ctaConfig?.url}
+        ctaSource="agents"
+      />
       <div className="space-y-6 pb-10">
 
         {/* Hero banner */}
@@ -309,7 +322,7 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
               <span className="text-[#FF2878]"> listos para trabajar</span>
             </h2>
             <p className="text-slate-300 text-sm md:text-base max-w-xl leading-relaxed">
-              Cada agente tiene un System Prompt profesional que puedes copiar y usar en ChatGPT, Claude o Gemini. Solo copia, pega y empieza a delegar.
+              Cada agente tiene un System Prompt profesional. Haz clic en cualquier tarjeta para ver el prompt completo y copiarlo en segundos.
             </p>
           </div>
         </div>
@@ -355,7 +368,7 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
               {/* Category */}
               <div>
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Categoría</span>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {([['all', 'Todos', `${CATALOG_AGENTS.length}`], ['work', 'Profesional', '15'], ['personal', 'Personal', '15']] as const).map(([val, label, count]) => (
                     <button key={val} onClick={() => setCategoryFilter(val)}
                       className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${categoryFilter === val ? 'bg-[#243F4C] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
@@ -369,7 +382,7 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
               {/* Difficulty */}
               <div>
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Dificultad</span>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   <button onClick={() => setDifficultyFilter('all')}
                     className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${difficultyFilter === 'all' ? 'bg-[#243F4C] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                   >Todos</button>
@@ -411,45 +424,53 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
         <div className="flex items-center justify-between text-sm text-slate-500 px-1">
           <span>
             Mostrando <strong className="text-slate-800">{filteredAgents.length}</strong> agente{filteredAgents.length !== 1 ? 's' : ''}
-            {workCount > 0 && personalCount > 0 && (
-              <span className="text-slate-400"> ({workCount} profesionales, {personalCount} personales)</span>
+            {workAgents.length > 0 && personalAgents.length > 0 && (
+              <span className="text-slate-400"> ({workAgents.length} profesionales, {personalAgents.length} personales)</span>
             )}
           </span>
         </div>
 
+        {/* How it works mini-guide */}
+        <div className="flex items-center gap-4 px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200/60 text-sm">
+          <span className="text-2xl flex-shrink-0">💡</span>
+          <p className="text-amber-800">
+            <strong>Toca cualquier tarjeta</strong> para girarla y ver el System Prompt completo. Copia y pega en tu IA favorita.
+          </p>
+        </div>
+
         {/* Work Agents Section */}
-        {workCount > 0 && (
+        {workAgents.length > 0 && (
           <div>
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-5">
               <div className="flex items-center gap-2">
                 <span className="text-xl">💼</span>
                 <h3 className="font-bold text-lg text-slate-800">Agentes Profesionales</h3>
               </div>
               <div className="flex-1 h-px bg-slate-200" />
-              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">{workCount}</span>
+              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">{workAgents.length}</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredAgents.filter(a => a.category === 'work').map((agent, idx) => (
-                <AgentCard key={agent.id} agent={agent} index={idx} onClick={() => setSelectedAgent(agent)} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {workAgents.map((agent, idx) => (
+                <FlipCard key={agent.id} agent={agent} index={idx} onInteraction={handleInteraction} />
               ))}
             </div>
           </div>
         )}
 
         {/* Personal Agents Section */}
-        {personalCount > 0 && (
-          <div className={workCount > 0 ? 'mt-8' : ''}>
-            <div className="flex items-center gap-3 mb-4">
+        {personalAgents.length > 0 && (
+          <div className={workAgents.length > 0 ? 'mt-10' : ''}>
+            <div className="flex items-center gap-3 mb-5">
               <div className="flex items-center gap-2">
                 <span className="text-xl">🏡</span>
                 <h3 className="font-bold text-lg text-slate-800">Agentes Personales</h3>
               </div>
               <div className="flex-1 h-px bg-slate-200" />
-              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">{personalCount}</span>
+              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full">{personalAgents.length}</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredAgents.filter(a => a.category === 'personal').map((agent, idx) => (
-                <AgentCard key={agent.id} agent={agent} index={idx} onClick={() => setSelectedAgent(agent)} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {personalAgents.map((agent, idx) => (
+                <FlipCard key={agent.id} agent={agent} index={idx} onInteraction={handleInteraction} />
               ))}
             </div>
           </div>
@@ -470,9 +491,10 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
           <div className="relative z-10">
             <h3 className="text-xl md:text-2xl font-black mb-2">¿Quieres crear agentes más potentes?</h3>
             <p className="text-white/80 text-sm md:text-base mb-5 max-w-lg mx-auto">
-              En IA Heroes Pro aprenderás a construir agentes avanzados con herramientas, memoria y automatización. Tus propios empleados virtuales.
+              En IA Heroes Pro aprenderás a construir agentes avanzados con herramientas, memoria y automatización.
             </p>
-            <a href="https://live.learningheroes.com/iah-artefact" target="_blank" rel="noopener noreferrer"
+            <a href={buildCTAUrl('agents-bottom')} target="_blank" rel="noopener noreferrer"
+              onClick={() => trackCTAClick('agents-bottom')}
               className="inline-block bg-white text-[#FF2878] font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
               Descubre IA Heroes Pro

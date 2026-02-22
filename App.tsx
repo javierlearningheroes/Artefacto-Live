@@ -5,6 +5,7 @@ import Day2 from './components/Day2';
 import Day3 from './components/Day3';
 import Day4 from './components/Day4';
 import AgentCatalog from './components/AgentCatalog';
+import AdminPanel from './components/AdminPanel';
 import { AppRoute } from './types';
 import { AdminProvider } from './contexts/AdminContext';
 
@@ -34,6 +35,7 @@ const App: React.FC = () => {
     <AdminProvider>
       <div className="app-container">
         {renderContent()}
+        <AdminPanel />
       </div>
     </AdminProvider>
   );

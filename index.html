@@ -48,6 +48,58 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
       }
+
+      /* ─── Flip Card 3D Animations ─── */
+      .flip-card-container {
+        perspective: 1200px;
+        min-height: 320px;
+      }
+      .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 320px;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+      }
+      .flip-card-flipped {
+        transform: rotateY(180deg);
+      }
+      .flip-card-front,
+      .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        min-height: 320px;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      .flip-card-back {
+        transform: rotateY(180deg);
+      }
+      /* Custom scrollbar for flip card back */
+      .flip-card-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .flip-card-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .flip-card-scroll::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.15);
+        border-radius: 2px;
+      }
+      .flip-card-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(255,255,255,0.3);
+      }
+
+      /* Fade in animation */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .flip-card-container {
+        animation: fadeInUp 0.5s ease-out both;
+      }
     </style>
 <link rel="icon" href="data:,">
 </head>

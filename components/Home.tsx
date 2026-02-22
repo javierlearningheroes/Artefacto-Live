@@ -4,6 +4,7 @@ import { AppRoute } from '../types';
 import { COLORS } from '../constants';
 import { isDayUnlocked, getUnlockLabel, getTimeUntilUnlock } from '../utils/unlockSystem';
 import { useAdmin } from '../contexts/AdminContext';
+import { buildCTAUrl, trackCTAClick } from '../services/trackingService';
 
 interface HomeProps {
   setRoute: (route: AppRoute) => void;
@@ -222,7 +223,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
           </div>
 
           <div className="relative z-10 mt-10 md:mt-12 text-center">
-             <a href="https://live.learningheroes.com/iah-artefact" target="_blank" rel="noopener noreferrer" className="inline-block w-full md:w-auto bg-[#FF2878] text-white font-bold py-4 px-8 md:px-10 rounded-xl shadow-lg hover:shadow-xl hover:bg-[#e01b63] transition-all transform hover:scale-105">
+             <a href={buildCTAUrl('home-hero')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('home-hero')} className="inline-block w-full md:w-auto bg-[#FF2878] text-white font-bold py-4 px-8 md:px-10 rounded-xl shadow-lg hover:shadow-xl hover:bg-[#e01b63] transition-all transform hover:scale-105">
                Reserva tu Plaza Ahora
              </a>
           </div>

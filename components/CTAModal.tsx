@@ -1,17 +1,24 @@
 import React from 'react';
 import { COLORS } from '../constants';
+import { trackCTAClick } from '../services/trackingService';
 
 interface CTAModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   message?: string;
+  ctaUrl?: string;
+  ctaSource?: string;
 }
 
-const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, title, message }) => {
+const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, title, message, ctaUrl, ctaSource = 'generic' }) => {
   if (!isOpen) return null;
 
-  const CAMPAIGN_URL = "https://live.learningheroes.com/iah-artefact";
+  const url = ctaUrl || "https://live.learningheroes.com/iah-artefact";
+
+  const handleCTAClick = () => {
+    trackCTAClick(ctaSource);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
@@ -43,7 +50,11 @@ const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, title, message }) 
           </p>
 
           <div className="space-y-3">
-            <a href={CAMPAIGN_URL} target="_blank" rel="noopener noreferrer" className="block w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-lg hover:shadow-xl hover:brightness-110 transition-all transform hover:scale-[1.02]" style={{ backgroundColor: COLORS.accent }}>
+            <a href={url} target="_blank" rel="noopener noreferrer"
+              onClick={handleCTAClick}
+              className="block w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-lg hover:shadow-xl hover:brightness-110 transition-all transform hover:scale-[1.02]"
+              style={{ backgroundColor: COLORS.accent }}
+            >
               👉 Reserva tu Plaza en IA Heroes Pro
             </a>
 
