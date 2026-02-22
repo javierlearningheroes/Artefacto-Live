@@ -100,7 +100,9 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
               <button key={day.id}
                 onClick={() => {
                   if (!unlocked) return;
-                  if (day.id === AppRoute.DAY_4) {
+                  if (day.id === AppRoute.DAY_3) {
+                    window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=banner&_gl=1*1bfcmi4*_gcl_au*MTM4MDYxNzE1LjE3NzE3OTE5NTU.', '_blank');
+                  } else if (day.id === AppRoute.DAY_4) {
                     window.open('https://consultor-de-agentes-ia-975119016078.us-west1.run.app', '_blank');
                   } else {
                     setRoute(day.id);
