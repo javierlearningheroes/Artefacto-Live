@@ -34,9 +34,9 @@ const PROMPT_EXAMPLES = [
     bad: 'Hazme un plan de marketing',
     good: 'Eres un CMO con 15 años de experiencia en e-commerce de moda sostenible. Mi tienda online vende ropa ecológica para mujeres de 30-45 años en España, facturamos 200K€/año y queremos crecer un 40%. Crea un plan de marketing digital de 90 días con: canales prioritarios, presupuesto sugerido por canal, KPIs semanales, y 3 campañas estacionales detalladas.',
     annotations: [
-      { label: 'ROL', text: 'CMO con 15 años en e-commerce', color: 'bg-violet-500' },
-      { label: 'CONTEXTO', text: 'Tienda eco, 200K€, público definido', color: 'bg-blue-500' },
-      { label: 'INSTRUCCIÓN', text: 'Plan 90 días con KPIs y campañas', color: 'bg-cyan-500' },
+      { label: 'ROL', text: 'CMO con 15 años en e-commerce', color: 'bg-[#243F4C]' },
+      { label: 'CONTEXTO', text: 'Tienda eco, 200K€, público definido', color: 'bg-slate-500' },
+      { label: 'INSTRUCCIÓN', text: 'Plan 90 días con KPIs y campañas', color: 'bg-slate-400' },
     ],
   },
   {
@@ -45,9 +45,9 @@ const PROMPT_EXAMPLES = [
     bad: 'Escríbeme un email para un cliente',
     good: 'Eres un director comercial experto en ventas B2B de software SaaS. Mi empresa vende un CRM para clínicas dentales a 99€/mes. El cliente "Dr. García" pidió una demo hace 3 días pero no ha respondido al seguimiento. Escribe un email de follow-up de máximo 100 palabras que: reconozca su tiempo limitado, mencione un caso de éxito de otra clínica, y proponga 2 horarios concretos esta semana.',
     annotations: [
-      { label: 'ROL', text: 'Director comercial B2B SaaS', color: 'bg-violet-500' },
-      { label: 'CONTEXTO', text: 'CRM dental, follow-up post-demo', color: 'bg-blue-500' },
-      { label: 'INSTRUCCIÓN', text: 'Email ≤100 palabras, caso éxito, 2 horarios', color: 'bg-cyan-500' },
+      { label: 'ROL', text: 'Director comercial B2B SaaS', color: 'bg-[#243F4C]' },
+      { label: 'CONTEXTO', text: 'CRM dental, follow-up post-demo', color: 'bg-slate-500' },
+      { label: 'INSTRUCCIÓN', text: 'Email ≤100 palabras, caso éxito, 2 horarios', color: 'bg-slate-400' },
     ],
   },
   {
@@ -56,9 +56,9 @@ const PROMPT_EXAMPLES = [
     bad: 'Dame ideas para posts de Instagram',
     good: 'Eres un social media manager especializado en cuentas de fitness para mujeres mayores de 40 años. Mi cuenta @vidafit40 tiene 12K seguidores, el engagement rate actual es del 2.3% y queremos llegar al 5%. Genera un calendario de 7 días con: tipo de contenido (reel/carrusel/story), hook de cada post, copy completo, 5 hashtags nicho, y mejor hora de publicación según mi audiencia española.',
     annotations: [
-      { label: 'ROL', text: 'Social media manager fitness 40+', color: 'bg-violet-500' },
-      { label: 'CONTEXTO', text: '12K seguidores, 2.3% engagement', color: 'bg-blue-500' },
-      { label: 'INSTRUCCIÓN', text: 'Calendario 7 días con métricas y horarios', color: 'bg-cyan-500' },
+      { label: 'ROL', text: 'Social media manager fitness 40+', color: 'bg-[#243F4C]' },
+      { label: 'CONTEXTO', text: '12K seguidores, 2.3% engagement', color: 'bg-slate-500' },
+      { label: 'INSTRUCCIÓN', text: 'Calendario 7 días con métricas y horarios', color: 'bg-slate-400' },
     ],
   },
   {
@@ -67,9 +67,9 @@ const PROMPT_EXAMPLES = [
     bad: 'Ayúdame a mejorar mi negocio',
     good: 'Eres un consultor de estrategia empresarial con experiencia en transformación digital de PYMEs. Mi restaurante italiano en Madrid tiene 45 mesas, factura 500K€/año con margen del 12%. Los costes de personal han subido un 18% este año y las reseñas en Google han bajado de 4.5 a 4.1 estrellas. Diagnostica los 3 problemas principales, propón 5 acciones concretas con timeline y coste estimado, y dame los KPIs que debería monitorizar semanalmente.',
     annotations: [
-      { label: 'ROL', text: 'Consultor estratégico PYMEs', color: 'bg-violet-500' },
-      { label: 'CONTEXTO', text: 'Restaurante, 500K€, márgenes bajando', color: 'bg-blue-500' },
-      { label: 'INSTRUCCIÓN', text: '3 problemas, 5 acciones, KPIs semanales', color: 'bg-cyan-500' },
+      { label: 'ROL', text: 'Consultor estratégico PYMEs', color: 'bg-[#243F4C]' },
+      { label: 'CONTEXTO', text: 'Restaurante, 500K€, márgenes bajando', color: 'bg-slate-500' },
+      { label: 'INSTRUCCIÓN', text: '3 problemas, 5 acciones, KPIs semanales', color: 'bg-slate-400' },
     ],
   },
 ];
@@ -118,10 +118,9 @@ const CopyButton = ({ text }: { text: string }) => {
   );
 };
 
-// ── Use Case Chat ──
+// ── Use Case Chat (Premium UI) ──
 const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
   const isPersonal = type === 'personal';
-  const icon = isPersonal ? '🏡' : '💼';
 
   const initialMessage = isPersonal
     ? '¡Hola! Soy tu consultor de casos de uso personales, creado por Learning Heroes. Mi objetivo es ayudarte a descubrir cómo la IA generativa puede mejorar tu día a día. Más adelante, en el programa, aprenderás a crear agentes como yo.\n\nPara empezar, **cuéntame: ¿cómo es un día normal en tu vida? ¿Qué rutinas tienes por la mañana?**'
@@ -130,9 +129,19 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'model', text: initialMessage }]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = '24px';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + 'px';
+    }
+  }, [input]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -155,76 +164,156 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
     }
   };
 
-  const accentColor = isPersonal ? '#FF2878' : '#243F4C';
+  const quickPrompts = isPersonal
+    ? ['Cuéntame sobre tu mañana típica', 'Qué hobbies tienes', 'Cómo organizas tu semana']
+    : ['Describe tu rol en la empresa', 'Qué herramientas usas a diario', 'Tu mayor reto profesional'];
 
   return (
-    <div className="flex flex-col h-[55vh] bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+    <div className="relative flex flex-col h-[62vh] md:h-[58vh] overflow-hidden rounded-2xl">
+      {/* Glassmorphism container */}
+      <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-2xl rounded-2xl border border-white/[0.08]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-900/95 rounded-2xl" />
+
+      {/* Subtle ambient glow */}
+      <div className={`absolute -top-20 -right-20 w-60 h-60 rounded-full blur-[80px] opacity-[0.06] ${
+        isPersonal ? 'bg-pink-500' : 'bg-cyan-500'
+      }`} />
+      <div className={`absolute -bottom-20 -left-20 w-60 h-60 rounded-full blur-[80px] opacity-[0.04] ${
+        isPersonal ? 'bg-purple-500' : 'bg-indigo-500'
+      }`} />
+
       {/* Header */}
-      <div className="p-3 border-b border-slate-100 flex items-center gap-3" style={{ background: `linear-gradient(135deg, ${accentColor}08, ${accentColor}15)` }}>
-        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm shadow-sm" style={{ backgroundColor: accentColor }}>
-          {icon}
+      <div className="relative z-10 px-5 py-4 border-b border-white/[0.06] flex items-center gap-3">
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-lg ${
+          isPersonal
+            ? 'bg-gradient-to-br from-pink-500/80 to-rose-600/80'
+            : 'bg-gradient-to-br from-[#243F4C]/80 to-slate-600/80'
+        }`}>
+          <Sparkles className="w-4 h-4 text-white" />
         </div>
-        <div>
-          <div className="font-bold text-sm text-slate-800">{isPersonal ? 'Consultor Personal' : 'Consultor Profesional'}</div>
-          <div className="text-[10px] text-slate-500">Agente IA de Learning Heroes</div>
+        <div className="flex-1">
+          <div className="font-semibold text-sm text-white/90 tracking-tight">
+            {isPersonal ? 'Consultor Personal' : 'Consultor Profesional'}
+          </div>
+          <div className="text-[11px] text-white/30 font-medium">Learning Heroes · IA Generativa</div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 animate-pulse" />
+          <span className="text-[10px] text-white/30 font-medium">En línea</span>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
+      <div className="relative z-10 flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
         {messages.map((msg, idx) => {
           const isUser = msg.role === 'user';
           return (
-            <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+            <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-slide-up`}
+              style={{ animationDelay: `${Math.min(idx * 50, 200)}ms` }}>
               {!isUser && (
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] mr-2 mt-1 flex-shrink-0" style={{ backgroundColor: accentColor }}>
-                  {icon}
+                <div className={`w-7 h-7 rounded-lg flex items-center justify-center mr-2.5 mt-1 flex-shrink-0 ${
+                  isPersonal
+                    ? 'bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/20'
+                    : 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20'
+                }`}>
+                  <Sparkles className={`w-3 h-3 ${isPersonal ? 'text-pink-400/80' : 'text-cyan-400/80'}`} />
                 </div>
               )}
-              <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
-                isUser ? 'bg-slate-800 text-white rounded-br-md' : 'bg-white text-slate-700 border border-slate-200 rounded-tl-md'
-              } ${msg.isError ? 'border-red-300 bg-red-50 text-red-700' : ''}`}>
+              <div className={`max-w-[82%] px-4 py-3 text-[13px] leading-relaxed ${
+                isUser
+                  ? 'bg-white/[0.08] text-white/90 rounded-2xl rounded-br-md border border-white/[0.06]'
+                  : 'bg-white/[0.03] text-white/70 rounded-2xl rounded-tl-md border border-white/[0.04]'
+              } ${msg.isError ? 'border-red-500/30 bg-red-500/10 text-red-300' : ''}`}>
                 <ReactMarkdown components={{
                   p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
-                  strong: ({node, ...props}) => <strong className={`font-bold ${isUser ? 'text-white' : 'text-[#243F4C]'}`} {...props} />,
-                  ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
-                  ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
+                  strong: ({node, ...props}) => <strong className={`font-semibold ${isUser ? 'text-white' : 'text-white/90'}`} {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/60" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/60" {...props} />,
                   table: ({node, ...props}) => <div className="overflow-x-auto my-2"><table className="w-full border-collapse text-xs" {...props} /></div>,
-                  th: ({node, ...props}) => <th className="border border-slate-200 px-2 py-1 text-left font-bold text-slate-700 bg-slate-50" {...props} />,
-                  td: ({node, ...props}) => <td className="border border-slate-200 px-2 py-1 text-slate-600" {...props} />,
+                  th: ({node, ...props}) => <th className="border border-white/10 px-2 py-1 text-left font-semibold text-white/70 bg-white/[0.03]" {...props} />,
+                  td: ({node, ...props}) => <td className="border border-white/10 px-2 py-1 text-white/50" {...props} />,
                 }}>{msg.text}</ReactMarkdown>
               </div>
             </div>
           );
         })}
+
+        {/* Typing indicator */}
         {isLoading && (
-          <div className="flex justify-start items-end">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] mr-2 flex-shrink-0" style={{ backgroundColor: accentColor }}>{icon}</div>
-            <div className="bg-white p-3 rounded-2xl border border-slate-200 rounded-tl-md flex items-center gap-1.5 shadow-sm">
-              <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" />
-              <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '75ms' }} />
-              <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+          <div className="flex justify-start items-end animate-slide-up">
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center mr-2.5 flex-shrink-0 ${
+              isPersonal
+                ? 'bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/20'
+                : 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20'
+            }`}>
+              <Sparkles className={`w-3 h-3 ${isPersonal ? 'text-pink-400/80' : 'text-cyan-400/80'}`} />
+            </div>
+            <div className="bg-white/[0.03] border border-white/[0.04] rounded-2xl rounded-tl-md px-4 py-3 flex items-center gap-2">
+              <span className="text-[11px] text-white/30 font-medium">Pensando</span>
+              <div className="flex items-center gap-1">
+                {[0, 1, 2].map(i => (
+                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce"
+                    style={{ animationDelay: `${i * 150}ms`, animationDuration: '1s' }} />
+                ))}
+              </div>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="p-3 bg-white border-t border-slate-200">
-        <div className="flex gap-2">
-          <input
-            type="text" value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            placeholder={isPersonal ? 'Cuéntame sobre tu día a día...' : 'Cuéntame sobre tu trabajo...'}
-            className="flex-1 p-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm bg-white text-slate-900 placeholder-slate-400"
-          />
-          <button onClick={handleSend} disabled={isLoading || !input.trim()}
-            className="px-4 py-3 rounded-xl font-bold text-white transition-all active:scale-95 disabled:opacity-50 text-sm"
-            style={{ backgroundColor: accentColor }}>
-            <Send className="w-4 h-4" />
-          </button>
+      {/* Quick prompts (only on first message) */}
+      {messages.length === 1 && !isLoading && (
+        <div className="relative z-10 px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide">
+          {quickPrompts.map((qp, i) => (
+            <button key={i} onClick={() => setInput(qp)}
+              className="flex-shrink-0 text-[11px] text-white/40 hover:text-white/70 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] px-3 py-1.5 rounded-full transition-all whitespace-nowrap">
+              {qp}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Input area */}
+      <div className="relative z-10 px-4 pb-4 pt-2">
+        <div className={`relative bg-white/[0.04] rounded-xl border transition-all duration-200 ${
+          isFocused ? 'border-white/[0.12] bg-white/[0.06]' : 'border-white/[0.06]'
+        }`}>
+          {/* Focus ring glow */}
+          {isFocused && (
+            <div className={`absolute -inset-px rounded-xl opacity-30 blur-sm ${
+              isPersonal ? 'bg-pink-500/20' : 'bg-cyan-500/20'
+            }`} />
+          )}
+
+          <div className="relative flex items-end gap-2 p-3">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              placeholder={isPersonal ? 'Cuéntame sobre tu día a día...' : 'Cuéntame sobre tu trabajo...'}
+              rows={1}
+              className="flex-1 bg-transparent text-white/90 text-sm placeholder:text-white/20 outline-none resize-none min-h-[24px] max-h-[120px] leading-relaxed"
+            />
+            <button onClick={handleSend} disabled={isLoading || !input.trim()}
+              className={`flex-shrink-0 p-2 rounded-lg transition-all duration-200 ${
+                input.trim()
+                  ? 'bg-white/90 text-slate-900 shadow-lg shadow-white/10 hover:bg-white active:scale-95'
+                  : 'bg-white/[0.05] text-white/20'
+              }`}>
+              {isLoading ? (
+                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -358,7 +447,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
         {/* ── Progress + Section Nav ── */}
         <div className="w-full mb-6">
           <div className="w-full bg-slate-200 rounded-full h-1.5 mb-4">
-            <div className="h-1.5 rounded-full transition-all duration-500 bg-gradient-to-r from-pink-500 to-purple-600" style={{ width: `${progress}%` }} />
+            <div className="h-1.5 rounded-full transition-all duration-500 bg-[#243F4C]" style={{ width: `${progress}%` }} />
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {SECTIONS.map((s, idx) => (
@@ -382,16 +471,16 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
           {activeSection === 0 && (
             <div className="flex flex-col items-center text-center space-y-8">
               <div className="relative">
-                <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 flex items-center justify-center text-5xl md:text-6xl shadow-2xl" style={{ animation: 'float 3s ease-in-out infinite' }}>
+                <div className="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-br from-slate-700 via-slate-600 to-slate-500 flex items-center justify-center text-5xl md:text-6xl shadow-2xl" style={{ animation: 'float 3s ease-in-out infinite' }}>
                   🎯
                 </div>
-                <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 blur-xl -z-10" />
+                <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-slate-400/10 to-slate-500/10 blur-xl -z-10" />
               </div>
 
               <div className="max-w-2xl space-y-4">
                 <h1 className="text-3xl md:text-5xl font-black text-slate-800 leading-tight">
                   De la teoría a la{' '}
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF2878] to-[#6366f1]">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#243F4C] to-slate-500">
                     práctica
                   </span>
                 </h1>
@@ -403,10 +492,10 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
               {/* What you'll do */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full max-w-3xl">
                 {[
-                  { icon: Eye, label: 'Galería', desc: 'Antes vs Después reales', color: 'text-indigo-500' },
-                  { icon: Image, label: 'Taller', desc: 'Mejora prompts con IA', color: 'text-pink-500' },
-                  { icon: Bot, label: 'Agentes', desc: 'Crea tu primer agente', color: 'text-violet-500' },
-                  { icon: Lightbulb, label: 'Casos de Uso', desc: 'Descubre los tuyos', color: 'text-cyan-600' },
+                  { icon: Eye, label: 'Galería', desc: 'Antes vs Después reales', color: 'text-slate-500' },
+                  { icon: Image, label: 'Taller', desc: 'Mejora prompts con IA', color: 'text-slate-500' },
+                  { icon: Bot, label: 'Agentes', desc: 'Crea tu primer agente', color: 'text-slate-500' },
+                  { icon: Lightbulb, label: 'Casos de Uso', desc: 'Descubre los tuyos', color: 'text-slate-500' },
                 ].map((item, i) => (
                   <button key={i} onClick={() => setActiveSection(i + 1)}
                     className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all text-left group">
@@ -418,9 +507,9 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
               </div>
 
               {/* Connection to Day 1 */}
-              <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-200 rounded-2xl p-5 max-w-2xl w-full">
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 max-w-2xl w-full">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-[#243F4C] flex items-center justify-center text-white shadow-md">
                     <Brain className="w-5 h-5" />
                   </div>
                   <div className="text-left">
@@ -430,8 +519,8 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 </div>
                 <div className="flex gap-2 mt-3">
                   {['ROL', 'CONTEXTO', 'INSTRUCCIÓN'].map((label, i) => (
-                    <div key={label} className={`flex-1 text-center py-2 rounded-xl text-xs font-bold text-white shadow-sm ${
-                      i === 0 ? 'bg-violet-500' : i === 1 ? 'bg-blue-500' : 'bg-cyan-500'
+                    <div key={label} className={`flex-1 text-center py-2 rounded-xl text-xs font-bold shadow-sm ${
+                      i === 0 ? 'bg-[#243F4C] text-white' : i === 1 ? 'bg-slate-200 text-slate-700' : 'bg-slate-100 text-slate-600'
                     }`}>{label}</div>
                   ))}
                 </div>
@@ -445,7 +534,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Antes vs Después</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#243F4C] to-slate-500">Antes vs Después</span>
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   Mira la diferencia entre un prompt mediocre y uno profesional. La técnica de Cebado en acción.
@@ -457,7 +546,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 {PROMPT_EXAMPLES.map((ex, idx) => (
                   <button key={idx} onClick={() => { setGalleryIndex(idx); setShowAnnotations(false); }}
                     className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                      galleryIndex === idx ? 'bg-indigo-600 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-500 hover:border-indigo-300'
+                      galleryIndex === idx ? 'bg-[#243F4C] text-white shadow-md' : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
                     }`}>
                     <span>{ex.icon}</span> {ex.category}
                   </button>
@@ -470,16 +559,16 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 return (
                   <div className="grid md:grid-cols-2 gap-4">
                     {/* BAD */}
-                    <div className="bg-white rounded-2xl border-2 border-red-200 shadow-sm overflow-hidden">
-                      <div className="bg-red-50 px-4 py-2.5 border-b border-red-100 flex items-center gap-2">
-                        <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                        <span className="text-xs font-bold text-red-500 uppercase tracking-wider">Prompt mediocre</span>
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                      <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-100 flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Prompt mediocre</span>
                       </div>
                       <div className="p-5">
-                        <p className="font-mono text-sm text-red-800 leading-relaxed bg-red-50/50 rounded-xl p-4 border border-red-100">
+                        <p className="font-mono text-sm text-slate-600 leading-relaxed bg-slate-50/50 rounded-xl p-4 border border-slate-100">
                           "{example.bad}"
                         </p>
-                        <div className="mt-4 flex items-center gap-2 text-xs text-red-400">
+                        <div className="mt-4 flex items-center gap-2 text-xs text-slate-400">
                           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                           </svg>
@@ -489,21 +578,21 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                     </div>
 
                     {/* GOOD */}
-                    <div className="bg-white rounded-2xl border-2 border-cyan-200 shadow-sm overflow-hidden">
-                      <div className="bg-cyan-50 px-4 py-2.5 border-b border-cyan-100 flex items-center justify-between">
+                    <div className="bg-white rounded-2xl border border-[#243F4C]/20 shadow-sm overflow-hidden">
+                      <div className="bg-[#243F4C]/[0.03] px-4 py-2.5 border-b border-[#243F4C]/10 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
-                          <span className="text-xs font-bold text-cyan-600 uppercase tracking-wider">Prompt profesional</span>
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#243F4C]/60" />
+                          <span className="text-xs font-bold text-[#243F4C]/70 uppercase tracking-wider">Prompt profesional</span>
                         </div>
                         <button onClick={() => setShowAnnotations(!showAnnotations)}
                           className={`text-[10px] font-bold px-2 py-1 rounded-full transition-all ${
-                            showAnnotations ? 'bg-indigo-500 text-white' : 'bg-indigo-100 text-indigo-600 hover:bg-indigo-200'
+                            showAnnotations ? 'bg-[#243F4C] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                           }`}>
                           {showAnnotations ? '✕ Ocultar' : '🔍 Analizar'}
                         </button>
                       </div>
                       <div className="p-5">
-                        <p className="font-mono text-sm text-cyan-900 leading-relaxed bg-cyan-50/50 rounded-xl p-4 border border-cyan-100">
+                        <p className="font-mono text-sm text-slate-700 leading-relaxed bg-slate-50/50 rounded-xl p-4 border border-slate-100">
                           "{example.good}"
                         </p>
 
@@ -537,7 +626,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">Taller Creativo</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#243F4C] to-slate-500">Taller Creativo</span>
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   Elige un reto, escribe tu prompt y deja que la IA lo mejore. Practica la técnica de Cebado en tiempo real.
@@ -568,11 +657,11 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                     <button key={idx} onClick={() => { setSelectedChallenge(idx); setPrompt(ch.prompt); setIsOptimized(false); }}
                       className={`w-full text-left p-4 rounded-2xl border-2 transition-all ${
                         selectedChallenge === idx
-                          ? 'border-indigo-400 bg-indigo-50 shadow-md'
+                          ? 'border-slate-400 bg-slate-50 shadow-md'
                           : 'border-slate-200 bg-white hover:border-slate-300 shadow-sm'
                       }`}>
                       <div className="flex items-center gap-2 mb-1">
-                        <Star className={`w-4 h-4 ${selectedChallenge === idx ? 'text-indigo-500' : 'text-slate-300'}`} />
+                        <Star className={`w-4 h-4 ${selectedChallenge === idx ? 'text-[#243F4C]' : 'text-slate-300'}`} />
                         <span className="font-bold text-sm text-slate-800">{ch.title}</span>
                       </div>
                       <p className="text-xs text-slate-500">{ch.hint}</p>
@@ -580,15 +669,15 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                   ))}
 
                   {/* Tips */}
-                  <div className="bg-violet-50 border border-violet-200 rounded-2xl p-4">
-                    <h4 className="text-xs font-bold text-violet-600 uppercase tracking-wider mb-2">Tips para {workshopMode === 'image' ? 'imágenes' : 'videos'}</h4>
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tips para {workshopMode === 'image' ? 'imágenes' : 'videos'}</h4>
                     <ul className="space-y-1.5">
                       {(workshopMode === 'image'
                         ? ['Describe el sujeto principal con detalle', 'Incluye estilo artístico (fotorealista, acuarela...)', 'Menciona iluminación y composición']
                         : ['Describe la acción/movimiento principal', 'Incluye transiciones o efectos de cámara', 'Menciona el tono (épico, profesional...)']
                       ).map((tip, i) => (
-                        <li key={i} className="flex items-start gap-1.5 text-xs text-violet-700">
-                          <CheckCircle className="w-3 h-3 text-violet-400 mt-0.5 flex-shrink-0" />
+                        <li key={i} className="flex items-start gap-1.5 text-xs text-slate-600">
+                          <CheckCircle className="w-3 h-3 text-slate-400 mt-0.5 flex-shrink-0" />
                           {tip}
                         </li>
                       ))}
@@ -602,7 +691,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                     <div className="flex justify-between items-center mb-3">
                       <label className="text-sm font-bold text-slate-700">Tu prompt:</label>
                       {isOptimized && (
-                        <span className="text-xs font-bold text-cyan-600 bg-cyan-50 px-2 py-1 rounded-full flex items-center gap-1 animate-pulse">
+                        <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full flex items-center gap-1">
                           <Sparkles className="w-3 h-3" /> Mejorado por IA
                         </span>
                       )}
@@ -612,7 +701,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                       onChange={(e) => { setPrompt(e.target.value); setIsOptimized(false); }}
                       placeholder={challenges[selectedChallenge]?.prompt || 'Escribe tu prompt aquí...'}
                       className={`w-full p-4 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none min-h-[160px] text-sm bg-white text-slate-900 placeholder-slate-400 transition-colors ${
-                        isOptimized ? 'border-cyan-300 ring-1 ring-cyan-100' : 'border-slate-300'
+                        isOptimized ? 'border-slate-400 ring-1 ring-slate-100' : 'border-slate-300'
                       }`}
                     />
 
@@ -634,19 +723,19 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
 
                   {/* What changed explanation */}
                   {isOptimized && (
-                    <div className="bg-gradient-to-r from-cyan-50 to-sky-50 border border-cyan-200 rounded-2xl p-4 animate-slide-up">
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 animate-slide-up">
                       <div className="flex items-center gap-2 mb-2">
-                        <Sparkles className="w-4 h-4 text-cyan-600" />
-                        <span className="text-xs font-bold text-cyan-700">¿Qué ha mejorado la IA?</span>
+                        <Sparkles className="w-4 h-4 text-slate-500" />
+                        <span className="text-xs font-bold text-slate-600">¿Qué ha mejorado la IA?</span>
                       </div>
                       <ul className="space-y-1">
                         {['Más detalle visual y descriptivo', 'Mejor estructura y especificidad', 'Vocabulario optimizado para generación IA'].map((t, i) => (
-                          <li key={i} className="flex items-center gap-1.5 text-xs text-cyan-600">
+                          <li key={i} className="flex items-center gap-1.5 text-xs text-slate-500">
                             <CheckCircle className="w-3 h-3 flex-shrink-0" /> {t}
                           </li>
                         ))}
                       </ul>
-                      <p className="text-[10px] text-cyan-500 mt-2">Copia el prompt y pégalo en tu generador de IA favorito (Midjourney, DALL-E, Runway...)</p>
+                      <p className="text-[10px] text-slate-400 mt-2">Copia el prompt y pégalo en tu generador de IA favorito (Midjourney, DALL-E, Runway...)</p>
                     </div>
                   )}
                 </div>
@@ -659,7 +748,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">Crea tu Agente IA</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#243F4C] to-slate-500">Crea tu Agente IA</span>
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   Elige una plantilla del catálogo o empieza desde cero. La IA convertirá tus ideas en un System Prompt profesional.
@@ -681,8 +770,8 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                     <button key={t.id} onClick={() => loadTemplate(idx)}
                       className={`text-left p-3 rounded-xl border-2 transition-all ${
                         selectedTemplate === idx
-                          ? 'border-violet-400 bg-violet-50 shadow-md'
-                          : 'border-slate-200 bg-white hover:border-violet-200 shadow-sm'
+                          ? 'border-slate-400 bg-slate-50 shadow-md'
+                          : 'border-slate-200 bg-white hover:border-slate-300 shadow-sm'
                       }`}>
                       <span className="text-xl">{t.icon}</span>
                       <div className="text-xs font-bold text-slate-800 mt-1 truncate">{t.name}</div>
@@ -698,7 +787,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
                     <span className="inline-flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-md bg-violet-500 text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                      <span className="w-5 h-5 rounded-md bg-[#243F4C] text-white flex items-center justify-center text-[10px] font-bold">1</span>
                       Rol
                     </span>
                   </label>
@@ -712,7 +801,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
                     <span className="inline-flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-md bg-blue-500 text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                      <span className="w-5 h-5 rounded-md bg-slate-500 text-white flex items-center justify-center text-[10px] font-bold">2</span>
                       Contexto
                     </span>
                   </label>
@@ -726,7 +815,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
                     <span className="inline-flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-md bg-cyan-500 text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                      <span className="w-5 h-5 rounded-md bg-slate-400 text-white flex items-center justify-center text-[10px] font-bold">3</span>
                       Pasos a Seguir
                     </span>
                   </label>
@@ -755,9 +844,9 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 <div className="bg-[#0F172A] rounded-2xl overflow-hidden shadow-lg border border-slate-700 animate-slide-up">
                   <div className="flex items-center justify-between px-4 py-3 bg-[#1e293b] border-b border-slate-700">
                     <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-500" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                       <span className="ml-2 text-[10px] font-mono text-slate-400 uppercase tracking-widest">System Prompt</span>
                     </div>
                     <CopyButton text={agentResult} />
@@ -766,9 +855,9 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                     <pre className="font-mono text-sm leading-relaxed whitespace-pre-wrap text-slate-200">{agentResult}</pre>
                   </div>
                   <div className="px-5 pb-4">
-                    <div className="bg-violet-500/10 border border-violet-500/30 rounded-xl p-3 flex items-start gap-2">
-                      <Lightbulb className="w-4 h-4 text-violet-400 flex-shrink-0 mt-0.5" />
-                      <p className="text-xs text-violet-300">
+                    <div className="bg-white/[0.04] border border-white/10 rounded-xl p-3 flex items-start gap-2">
+                      <Lightbulb className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-xs text-slate-400">
                         <strong>Siguiente paso:</strong> Copia este System Prompt y pégalo en ChatGPT, Claude o Gemini como "instrucciones personalizadas". ¡Tu agente está listo!
                       </p>
                     </div>
@@ -784,7 +873,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
                   Descubre{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">Tus Casos de Uso</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#243F4C] to-slate-500">Tus Casos de Uso</span>
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   Estos agentes están diseñados para conocerte y proponerte aplicaciones concretas de IA personalizadas para tu vida.
@@ -794,36 +883,32 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
               {/* Mode toggle */}
               <div className="flex justify-center gap-3">
                 <button onClick={() => setUseCaseMode('personal')}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all ${
+                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
                     useCaseMode === 'personal'
-                      ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg scale-105'
-                      : 'bg-white border-2 border-pink-200 text-pink-600 hover:border-pink-300'
+                      ? 'bg-[#243F4C] text-white shadow-lg scale-[1.02]'
+                      : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
                   }`}>
                   <HomeIcon className="w-4 h-4" /> Mi Vida Personal
                 </button>
                 <button onClick={() => setUseCaseMode('professional')}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold transition-all ${
+                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-semibold transition-all ${
                     useCaseMode === 'professional'
-                      ? 'bg-gradient-to-r from-[#243F4C] to-slate-700 text-white shadow-lg scale-105'
-                      : 'bg-white border-2 border-blue-200 text-blue-600 hover:border-blue-300'
+                      ? 'bg-[#243F4C] text-white shadow-lg scale-[1.02]'
+                      : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
                   }`}>
                   <Briefcase className="w-4 h-4" /> Mi Carrera Profesional
                 </button>
               </div>
 
               {/* Info card */}
-              <div className={`rounded-2xl p-4 border ${
-                useCaseMode === 'personal'
-                  ? 'bg-pink-50 border-pink-200'
-                  : 'bg-blue-50 border-blue-200'
-              }`}>
+              <div className="rounded-2xl p-4 border bg-slate-50 border-slate-200">
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{useCaseMode === 'personal' ? '🏡' : '💼'}</span>
                   <div>
-                    <h3 className={`font-bold text-sm ${useCaseMode === 'personal' ? 'text-pink-900' : 'text-blue-900'}`}>
+                    <h3 className="font-bold text-sm text-slate-700">
                       {useCaseMode === 'personal' ? '¿Cómo puede la IA mejorar tu día a día?' : '¿Cómo puede la IA transformar tu trabajo?'}
                     </h3>
-                    <p className={`text-xs ${useCaseMode === 'personal' ? 'text-pink-600' : 'text-blue-600'}`}>
+                    <p className="text-xs text-slate-500">
                       Cuéntale sobre tu vida y te propondrá al menos 10 aplicaciones concretas con prompts listos para usar.
                     </p>
                   </div>
@@ -850,7 +935,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
 
           {activeSection < SECTIONS.length - 1 ? (
             <button onClick={goNext}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg hover:shadow-xl hover:scale-105">
+              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all bg-[#243F4C] text-white shadow-lg hover:shadow-xl hover:bg-[#1a3040]">
               Siguiente <ArrowRight className="w-4 h-4" />
             </button>
           ) : (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Home from './components/Home';
 import Day1 from './components/Day1';
 import Day2 from './components/Day2';
@@ -42,6 +43,7 @@ const App: React.FC = () => {
         </div>
 
         <Analytics />
+        <SpeedInsights />
       </div>
     </AdminProvider>
   );

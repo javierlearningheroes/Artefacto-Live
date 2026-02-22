@@ -30,8 +30,8 @@ const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, title, message, ct
 
         {/* Decorative Header */}
         <div className="h-32 bg-gradient-to-r from-[#243F4C] to-[#2a4d5e] relative flex items-center justify-center overflow-hidden">
-           <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF2878] rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
-           <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400 rounded-full blur-2xl opacity-20 -ml-5 -mb-5"></div>
+           <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF2878] rounded-full blur-3xl opacity-10 -mr-10 -mt-10"></div>
+           <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400 rounded-full blur-2xl opacity-10 -ml-5 -mb-5"></div>
            <span className="text-6xl animate-bounce-slow relative z-10">🚀</span>
 
            <button onClick={onClose} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
@@ -53,7 +53,7 @@ const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, title, message, ct
             <a href={url} target="_blank" rel="noopener noreferrer"
               onClick={handleCTAClick}
               className="block w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-lg hover:shadow-xl hover:brightness-110 transition-all transform hover:scale-[1.02]"
-              style={{ backgroundColor: COLORS.accent }}
+              style={{ backgroundColor: COLORS.primary }}
             >
               👉 Reserva tu Plaza en IA Heroes Pro
             </a>

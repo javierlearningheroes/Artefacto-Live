@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
     <div className="min-h-[100dvh] flex flex-col font-sans text-slate-800">
       {/* Sticky Promo Banner — visible from Wednesday 25 Feb 20:30 CET */}
       {showBanner && (
-        <a href={buildCTAUrl('banner')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('banner')} className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2" style={{ backgroundColor: COLORS.accent }}>
+        <a href={buildCTAUrl('banner')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('banner')} className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2" style={{ backgroundColor: COLORS.primary }}>
           <span className="text-xs md:text-base truncate md:overflow-visible">🚀 ¿Quieres dominar la IA? Únete al programa IA Heroes Pro</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />

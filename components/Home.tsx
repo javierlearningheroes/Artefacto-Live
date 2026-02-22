@@ -25,7 +25,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       title: "Día 1: Fundamentos",
       desc: "Domina la teoría y los conceptos clave de la IA.",
       icon: "🧠",
-      color: "from-blue-500 to-cyan-400",
+      color: "from-blue-400/70 to-cyan-400/50",
       highlight: "La revolución exponencial"
     },
     {
@@ -33,7 +33,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       title: "Día 2: Taller de Prompts",
       desc: "Crea prompts profesionales y descubre tus casos de uso.",
       icon: "🎨",
-      color: "from-purple-500 to-pink-400",
+      color: "from-purple-400/70 to-pink-400/50",
       highlight: "Prompt Engineering + Agentes"
     },
     {
@@ -41,7 +41,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       title: "Día 3: Consultoría IA",
       desc: "Asesoramiento de carrera personalizado con IA.",
       icon: "💼",
-      color: "from-pink-500 to-rose-400",
+      color: "from-pink-400/60 to-rose-400/40",
       highlight: "Tu futuro profesional"
     },
     {
@@ -49,7 +49,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       title: "Día 4: Negocio + IA",
       desc: "Auditoría y agentes IA para tu negocio real.",
       icon: "🚀",
-      color: "from-cyan-500 to-sky-400",
+      color: "from-cyan-400/60 to-sky-400/40",
       highlight: "ROI inmediato"
     },
   ];
@@ -67,13 +67,13 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
 
         {/* Hero Section */}
         <div className="text-center max-w-5xl mb-8 md:mb-10 animate-fade-in-up pt-4 md:pt-8">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200/60 text-pink-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-            <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
+          <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200/60 text-slate-500 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
+            <span className="w-2 h-2 rounded-full bg-[#FF2878]/60 animate-pulse" />
             Semana de Lanzamiento — IA Heroes
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-slate-800 mb-4 md:mb-6 leading-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#243F4C] to-[#FF2878]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#243F4C] to-[#243F4C]/60">
               Tu Transformación con IA
             </span>
             <br />
@@ -86,7 +86,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
 
         {/* Admin Badge */}
         {isAdmin && (
-          <div className="mb-4 px-4 py-2 bg-pink-100 text-pink-800 rounded-full text-sm font-semibold border border-pink-300">
+          <div className="mb-4 px-4 py-2 bg-slate-100 text-slate-600 rounded-full text-sm font-semibold border border-slate-200">
             Modo Admin — Todos los días desbloqueados
           </div>
         )}
@@ -184,8 +184,8 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
           >
             {/* Decorative grid */}
             <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-15 blur-3xl rounded-full -mr-16 -mt-16 group-hover:opacity-25 transition-opacity" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-400 opacity-10 blur-3xl rounded-full -ml-10 -mb-10" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-[0.08] blur-3xl rounded-full -mr-16 -mt-16 group-hover:opacity-[0.12] transition-opacity" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-400 opacity-[0.05] blur-3xl rounded-full -ml-10 -mb-10" />
 
             <div className="relative z-10 flex items-center gap-5">
               <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-3xl md:text-4xl group-hover:scale-110 transition-transform duration-300">
@@ -193,8 +193,8 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-pink-300 bg-pink-500/20 px-2.5 py-0.5 rounded-full">30 agentes</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-300 bg-cyan-500/20 px-2.5 py-0.5 rounded-full">Siempre accesible</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-pink-200/80 bg-pink-500/10 px-2.5 py-0.5 rounded-full">30 agentes</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300/80 bg-white/5 px-2.5 py-0.5 rounded-full">Siempre accesible</span>
                 </div>
                 <h3 className="text-xl md:text-2xl font-black text-white mb-1 leading-tight">
                   Tu Ejército de Agentes IA
@@ -252,7 +252,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
         {/* Testimonials */}
         <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
           <div className="bg-gradient-to-br from-[#243F4C] to-[#1a3040] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-10 blur-3xl rounded-full -mr-16 -mt-16" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-[0.05] blur-3xl rounded-full -mr-16 -mt-16" />
             <h3 className="text-xl md:text-2xl font-bold mb-6 text-center relative z-10">Lo que dicen nuestros alumnos</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
               {[

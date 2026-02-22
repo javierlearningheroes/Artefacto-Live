@@ -22,7 +22,7 @@ const CopyButton = ({ text, label = 'Copiar', copiedLabel = 'Copiado', className
   return (
     <button onClick={handleCopy}
       className={`inline-flex items-center gap-2 font-bold transition-all active:scale-95 ${
-        copied ? 'bg-cyan-500 text-white' : 'bg-[#FF2878] text-white hover:bg-[#e01b63]'
+        copied ? 'bg-[#243F4C] text-white' : 'bg-[#243F4C] text-white hover:bg-[#1a3040]'
       } ${className}`}
     >
       {copied ? (
@@ -216,7 +216,7 @@ const FlipCard = ({ agent, index, onInteraction }: { agent: CatalogAgent; index:
                 text={agent.systemPrompt}
                 label="Copiar System Prompt"
                 copiedLabel="Prompt Copiado"
-                className="w-full justify-center py-3 px-4 rounded-xl text-sm shadow-lg shadow-pink-500/20"
+                className="w-full justify-center py-3 px-4 rounded-xl text-sm shadow-lg shadow-slate-500/10"
                 onCopy={() => onInteraction?.('copy')}
               />
               <p className="text-[10px] text-slate-500 text-center mt-2">
@@ -315,7 +315,7 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-3xl">🤖</span>
-              <span className="text-xs font-bold uppercase tracking-widest text-pink-300 bg-pink-500/20 px-3 py-1 rounded-full">{CATALOG_AGENTS.length} agentes listos</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-300 bg-white/10 px-3 py-1 rounded-full">{CATALOG_AGENTS.length} agentes listos</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-black mb-2 leading-tight">
               Tus empleados virtuales,
@@ -340,7 +340,7 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Buscar agente por nombre o función..."
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none text-sm md:text-base"
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-[#243F4C]/30 focus:border-transparent outline-none text-sm md:text-base"
               />
               {search && (
                 <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
