@@ -41,7 +41,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       title: "Día 3: Consultoría IA",
       desc: "Asesoramiento de carrera personalizado con IA.",
       icon: "💼",
-      color: "from-amber-500 to-orange-400",
+      color: "from-pink-500 to-rose-400",
       highlight: "Tu futuro profesional"
     },
     {
@@ -49,7 +49,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       title: "Día 4: Negocio + IA",
       desc: "Auditoría y agentes IA para tu negocio real.",
       icon: "🚀",
-      color: "from-emerald-500 to-teal-400",
+      color: "from-cyan-500 to-sky-400",
       highlight: "ROI inmediato"
     },
   ];
@@ -86,7 +86,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
 
         {/* Admin Badge */}
         {isAdmin && (
-          <div className="mb-4 px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold border border-amber-300">
+          <div className="mb-4 px-4 py-2 bg-pink-100 text-pink-800 rounded-full text-sm font-semibold border border-pink-300">
             Modo Admin — Todos los días desbloqueados
           </div>
         )}
@@ -192,7 +192,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-pink-300 bg-pink-500/20 px-2.5 py-0.5 rounded-full">30 agentes</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-300 bg-emerald-500/20 px-2.5 py-0.5 rounded-full">Siempre accesible</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-300 bg-cyan-500/20 px-2.5 py-0.5 rounded-full">Siempre accesible</span>
                 </div>
                 <h3 className="text-xl md:text-2xl font-black text-white mb-1 leading-tight">
                   Tu Ejército de Agentes IA

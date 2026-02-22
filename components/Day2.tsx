@@ -24,7 +24,7 @@ const CopyButton = ({ text }: { text: string }) => {
     <button onClick={handleCopy} className="flex items-center gap-2 py-2 px-4 rounded-xl border-2 border-slate-200 font-bold text-slate-600 hover:bg-slate-50 transition-colors text-sm">
       {copied ? (
         <>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
           Copiado
@@ -365,8 +365,8 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                   Escribe tu prompt:
                 </label>
                 {isOptimized && (
-                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full flex items-center gap-1 animate-pulse">
-                    <span className="text-emerald-500">✨</span> Optimizado por IA
+                  <span className="text-xs font-bold text-cyan-600 bg-cyan-50 px-2 py-1 rounded-full flex items-center gap-1 animate-pulse">
+                    <span className="text-cyan-500">✨</span> Optimizado por IA
                   </span>
                 )}
               </div>
@@ -375,7 +375,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                 value={prompt}
                 onChange={handlePromptChange}
                 placeholder={placeholders[mode]}
-                className={`w-full p-4 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none min-h-[140px] text-base md:text-lg bg-white text-slate-900 placeholder-slate-400 transition-colors ${isOptimized ? 'border-emerald-300 ring-1 ring-emerald-100' : 'border-slate-300'}`}
+                className={`w-full p-4 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none min-h-[140px] text-base md:text-lg bg-white text-slate-900 placeholder-slate-400 transition-colors ${isOptimized ? 'border-cyan-300 ring-1 ring-cyan-100' : 'border-slate-300'}`}
               />
 
               <div className="flex flex-col sm:flex-row gap-3">
@@ -457,7 +457,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
                   <span className="inline-flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold">3</span>
+                    <span className="w-6 h-6 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center text-xs font-bold">3</span>
                     Pasos a Seguir
                   </span>
                 </label>
@@ -466,7 +466,7 @@ const Day2: React.FC<Day2Props> = ({ setRoute }) => {
                   value={agentInstruccion}
                   onChange={(e) => setAgentInstruccion(e.target.value)}
                   placeholder="Ej: 1) Analiza el contenido que me proporcionan. 2) Genera 5 ideas de posts para Instagram con hook, cuerpo y CTA. 3) Presenta en formato tabla..."
-                  className="w-full p-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none min-h-[80px] text-sm md:text-base bg-white text-slate-900 placeholder-slate-400"
+                  className="w-full p-4 rounded-xl border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none min-h-[80px] text-sm md:text-base bg-white text-slate-900 placeholder-slate-400"
                 />
               </div>
 

@@ -59,7 +59,7 @@ export const BackgroundGradient: React.FC = () => {
       className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none"
       style={{
         zIndex: 0,
-        opacity: 0.07,
+        opacity: 0.18,
         background: 'linear-gradient(40deg, var(--gradient-bg-start), var(--gradient-bg-end))',
       }}
       onMouseMove={handleMouseMove}

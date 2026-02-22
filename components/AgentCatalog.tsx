@@ -22,7 +22,7 @@ const CopyButton = ({ text, label = 'Copiar', copiedLabel = 'Copiado', className
   return (
     <button onClick={handleCopy}
       className={`inline-flex items-center gap-2 font-bold transition-all active:scale-95 ${
-        copied ? 'bg-emerald-500 text-white' : 'bg-[#FF2878] text-white hover:bg-[#e01b63]'
+        copied ? 'bg-cyan-500 text-white' : 'bg-[#FF2878] text-white hover:bg-[#e01b63]'
       } ${className}`}
     >
       {copied ? (
@@ -91,7 +91,7 @@ const FlipCard = ({ agent, index, onInteraction }: { agent: CatalogAgent; index:
           <div className="relative h-full bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-xl hover:border-slate-300 cursor-pointer group">
 
             {/* Top gradient accent */}
-            <div className={`h-1.5 w-full ${isWork ? 'bg-gradient-to-r from-[#243F4C] via-blue-500 to-cyan-400' : 'bg-gradient-to-r from-[#FF2878] via-pink-400 to-amber-400'}`} />
+            <div className={`h-1.5 w-full ${isWork ? 'bg-gradient-to-r from-[#243F4C] via-blue-500 to-cyan-400' : 'bg-gradient-to-r from-[#FF2878] via-pink-400 to-rose-400'}`} />
 
             {/* Card body */}
             <div className="flex flex-col flex-1 p-5">
@@ -183,7 +183,7 @@ const FlipCard = ({ agent, index, onInteraction }: { agent: CatalogAgent; index:
                 <div className="space-y-1.5">
                   {agent.useCases.map((uc, i) => (
                     <div key={i} className="flex items-start gap-2 text-xs text-slate-300">
-                      <span className="text-emerald-400 mt-0.5 flex-shrink-0">
+                      <span className="text-cyan-400 mt-0.5 flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
@@ -431,9 +431,9 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
         </div>
 
         {/* How it works mini-guide */}
-        <div className="flex items-center gap-4 px-4 py-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200/60 text-sm">
+        <div className="flex items-center gap-4 px-4 py-3 bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl border border-rose-200/60 text-sm">
           <span className="text-2xl flex-shrink-0">💡</span>
-          <p className="text-amber-800">
+          <p className="text-rose-800">
             <strong>Toca cualquier tarjeta</strong> para girarla y ver el System Prompt completo. Copia y pega en tu IA favorita.
           </p>
         </div>

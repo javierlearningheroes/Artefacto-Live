@@ -30,8 +30,8 @@ import {
 const SECTIONS = [
   { id: 'welcome', title: 'Bienvenida', icon: '🚀', color: '#FF2878' },
   { id: 'what-is-ai', title: '¿Qué es la IA?', icon: '🧠', color: '#6366f1' },
-  { id: 'prompting', title: 'Prompt Engineering', icon: '🗣️', color: '#10b981' },
-  { id: 'salaries', title: 'Salarios', icon: '💰', color: '#f59e0b' },
+  { id: 'prompting', title: 'Prompt Engineering', icon: '🗣️', color: '#61F2F2' },
+  { id: 'salaries', title: 'Salarios', icon: '💰', color: '#FF2878' },
   { id: 'agents', title: 'Agentes IA', icon: '🤖', color: '#8b5cf6' },
   { id: 'agent-demo', title: 'Demo en Vivo', icon: '⚡', color: '#ec4899' },
   { id: 'quiz', title: 'Test Final', icon: '🎯', color: '#243F4C' },
@@ -139,10 +139,10 @@ const agentComponents = [
     subtitle: 'Las Manos',
     desc: 'Las conexiones externas que le permiten actuar: Gmail, CRM, Calendar, Slack, bases de datos, APIs.',
     icon: Wrench,
-    color: 'from-emerald-500 to-teal-600',
-    bgLight: 'bg-emerald-50',
-    textColor: 'text-emerald-600',
-    borderColor: 'border-emerald-200',
+    color: 'from-cyan-500 to-cyan-600',
+    bgLight: 'bg-cyan-50',
+    textColor: 'text-cyan-600',
+    borderColor: 'border-cyan-200',
     analogy: 'Como las herramientas de un artesano',
   },
   {
@@ -151,10 +151,10 @@ const agentComponents = [
     subtitle: 'El Contexto',
     desc: 'La información específica que el agente necesita para trabajar bien: catálogos, precios, políticas, historial de clientes.',
     icon: Database,
-    color: 'from-amber-500 to-orange-600',
-    bgLight: 'bg-amber-50',
-    textColor: 'text-amber-600',
-    borderColor: 'border-amber-200',
+    color: 'from-pink-500 to-rose-600',
+    bgLight: 'bg-pink-50',
+    textColor: 'text-pink-600',
+    borderColor: 'border-pink-200',
     analogy: 'Como el dossier de formación del empleado',
   },
   {
@@ -179,10 +179,10 @@ const demoChatSteps = [
   { tool: 'system', icon: Brain, label: 'System Prompt', action: 'Identifica nombre → actualiza contexto → pregunta por interés.', color: 'text-violet-500' },
   { tool: 'bot', icon: Bot, label: 'Agente', action: 'Encantada Carlos. ¿En qué tratamiento estás interesado?', color: 'text-blue-500' },
   { tool: 'user', icon: User, label: 'Usuario', action: 'Quiero un blanqueamiento dental.', color: 'text-slate-500' },
-  { tool: 'tool', icon: Database, label: 'CRM Tool', action: 'Registra lead: Carlos — Interés: Blanqueamiento.', color: 'text-amber-500' },
+  { tool: 'tool', icon: Database, label: 'CRM Tool', action: 'Registra lead: Carlos — Interés: Blanqueamiento.', color: 'text-pink-500' },
   { tool: 'bot', icon: Bot, label: 'Agente', action: '¡Perfecto! ¿Te gustaría agendar una cita de valoración gratuita?', color: 'text-blue-500' },
   { tool: 'user', icon: User, label: 'Usuario', action: 'Sí, por favor.', color: 'text-slate-500' },
-  { tool: 'tool', icon: Calendar, label: 'Calendar Tool', action: 'Consulta disponibilidad → genera link de reserva.', color: 'text-emerald-500' },
+  { tool: 'tool', icon: Calendar, label: 'Calendar Tool', action: 'Consulta disponibilidad → genera link de reserva.', color: 'text-cyan-500' },
   { tool: 'bot', icon: Bot, label: 'Agente', action: 'Aquí tienes mi calendario para elegir tu hora: cal.com/sonrisas', color: 'text-blue-500' },
 ];
 
@@ -229,9 +229,9 @@ const AnimatedCounter = ({ end, duration = 2000, prefix = '', suffix = '' }: { e
 const TokenPredictor = () => {
   const [step, setStep] = useState(0);
   const predictions = [
-    { word: 'herramienta', prob: 85, color: '#10b981' },
+    { word: 'herramienta', prob: 85, color: '#61F2F2' },
     { word: 'amenaza', prob: 10, color: '#ef4444' },
-    { word: 'moda', prob: 5, color: '#f59e0b' },
+    { word: 'moda', prob: 5, color: '#FF2878' },
   ];
 
   return (
@@ -252,7 +252,7 @@ const TokenPredictor = () => {
       <div className="font-mono text-lg md:text-xl mb-6 relative z-10">
         <span className="text-slate-400">La IA es una </span>
         {step === 2 && (
-          <span className="text-emerald-400 font-bold bg-emerald-400/10 px-1.5 py-0.5 rounded-lg animate-pulse">
+          <span className="text-cyan-400 font-bold bg-cyan-400/10 px-1.5 py-0.5 rounded-lg animate-pulse">
             herramienta
           </span>
         )}
@@ -332,9 +332,9 @@ const PrimingBuilder = () => {
       id: 'instruccion',
       label: 'INSTRUCCIÓN',
       placeholder: 'Crea un calendario editorial de 30 días para Instagram con: fecha, tema, tipo de contenido (reel/carrusel/story), copy del post y 5 hashtags relevantes.',
-      color: 'from-emerald-500 to-teal-600',
-      bgColor: 'bg-emerald-50',
-      borderColor: 'border-emerald-300',
+      color: 'from-cyan-500 to-cyan-600',
+      bgColor: 'bg-cyan-50',
+      borderColor: 'border-cyan-300',
       icon: Target,
     },
   ];
@@ -372,7 +372,7 @@ const PrimingBuilder = () => {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="font-black text-sm tracking-wider text-slate-800">#{field.label}</span>
-                  {filled[field.id] && <CheckCircle className="w-4 h-4 text-emerald-500" />}
+                  {filled[field.id] && <CheckCircle className="w-4 h-4 text-cyan-500" />}
                 </div>
               </div>
               <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${activeField === field.id ? 'rotate-180' : ''}`} />
@@ -390,12 +390,12 @@ const PrimingBuilder = () => {
       ))}
 
       {allFilled && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl text-center animate-fade-in-up">
-          <div className="flex items-center justify-center gap-2 text-emerald-700 font-bold">
+        <div className="mt-4 p-4 bg-gradient-to-r from-cyan-50 to-sky-50 border border-cyan-200 rounded-2xl text-center animate-fade-in-up">
+          <div className="flex items-center justify-center gap-2 text-cyan-700 font-bold">
             <Sparkles className="w-5 h-5" />
             ¡Prompt completo! Ahora la IA tiene el contexto necesario.
           </div>
-          <p className="text-emerald-600 text-sm mt-1">Esta técnica es la base de todo buen prompt profesional.</p>
+          <p className="text-cyan-600 text-sm mt-1">Esta técnica es la base de todo buen prompt profesional.</p>
         </div>
       )}
     </div>
@@ -444,7 +444,7 @@ const AgentDemoChat = () => {
           <div>
             <div className="text-white font-bold text-sm">Ana — Clínica Sonrisas</div>
             <div className="text-slate-400 text-xs flex items-center gap-1">
-              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+              <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
               Agente IA Activo
             </div>
           </div>
@@ -521,7 +521,7 @@ const AgentDemoChat = () => {
 
         {currentStep >= demoChatSteps.length - 1 && currentStep >= 0 && (
           <div className="flex justify-center pt-2 animate-fade-in-up">
-            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl px-4 py-2.5 shadow-sm">
+            <div className="inline-flex items-center gap-2 bg-cyan-50 border border-cyan-200 text-cyan-700 rounded-xl px-4 py-2.5 shadow-sm">
               <CheckCircle className="w-4 h-4" />
               <span className="text-sm font-bold">Lead captado en 45 segundos — 0% intervención humana</span>
             </div>
@@ -597,7 +597,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                   idx === activeSection
                     ? 'bg-slate-800 text-white shadow-lg scale-105'
                     : idx < activeSection
-                      ? 'bg-emerald-100 text-emerald-700'
+                      ? 'bg-cyan-100 text-cyan-700'
                       : 'bg-slate-100 text-slate-400'
                 }`}
               >
@@ -666,7 +666,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                       <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }} />
                       <Legend />
                       <Line type="monotone" dataKey="Computers" stroke="#94a3b8" strokeWidth={2} dot={false} opacity={0.5} />
-                      <Line type="monotone" dataKey="Software" stroke="#eab308" strokeWidth={2} dot={false} opacity={0.6} />
+                      <Line type="monotone" dataKey="Software" stroke="#FF2878" strokeWidth={2} dot={false} opacity={0.6} />
                       <Line type="monotone" dataKey="AI" name="IA" stroke="#6366f1" strokeWidth={4} dot={false} activeDot={{ r: 6, strokeWidth: 0 }} />
                     </LineChart>
                   </ResponsiveContainer>
@@ -693,8 +693,8 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                 <div className="space-y-4">
                   {[
                     { icon: Brain, title: 'Predice, no piensa', text: 'La IA genera texto prediciendo la siguiente palabra más probable. Miles de millones de parámetros calculan qué token viene después.', color: 'text-violet-500', bg: 'bg-violet-50' },
-                    { icon: Eye, title: 'Caja negra', text: 'Su funcionamiento interno es opaco: no sabemos exactamente por qué elige cada palabra. Por eso puede "alucinar" datos falsos.', color: 'text-amber-500', bg: 'bg-amber-50' },
-                    { icon: Target, title: 'Tú decides la calidad', text: 'El resultado depende de CÓMO le hablas. Un prompt vago da resultados mediocres. Un prompt profesional da resultados expertos.', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                    { icon: Eye, title: 'Caja negra', text: 'Su funcionamiento interno es opaco: no sabemos exactamente por qué elige cada palabra. Por eso puede "alucinar" datos falsos.', color: 'text-rose-500', bg: 'bg-rose-50' },
+                    { icon: Target, title: 'Tú decides la calidad', text: 'El resultado depende de CÓMO le hablas. Un prompt vago da resultados mediocres. Un prompt profesional da resultados expertos.', color: 'text-cyan-500', bg: 'bg-cyan-50' },
                   ].map((item, i) => (
                     <div key={i} className={`${item.bg} border border-slate-100 rounded-2xl p-5 shadow-sm`}>
                       <div className="flex items-center gap-3 mb-2">
@@ -714,9 +714,9 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                     </span>
                   </div>
                   <TokenPredictor />
-                  <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
-                    <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-amber-700">
+                  <div className="mt-4 p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2">
+                    <Shield className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-rose-700">
                       <strong>Importante:</strong> Nunca confíes ciegamente en la IA. Siempre verifica datos críticos. La IA es una herramienta, no un oráculo.
                     </p>
                   </div>
@@ -730,7 +730,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Prompt Engineering</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-cyan-600">Prompt Engineering</span>
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   El arte de hablarle a la IA para obtener resultados de nivel experto. No necesitas programar.
@@ -753,7 +753,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                       {[
                         { num: '1', label: 'ROL', desc: 'Dile quién es: "Eres un experto en..."', color: 'bg-violet-500' },
                         { num: '2', label: 'CONTEXTO', desc: 'Explica tu situación: "Trabajo en..."', color: 'bg-blue-500' },
-                        { num: '3', label: 'INSTRUCCIÓN', desc: 'Di exactamente qué quieres: "Crea un..."', color: 'bg-emerald-500' },
+                        { num: '3', label: 'INSTRUCCIÓN', desc: 'Di exactamente qué quieres: "Crea un..."', color: 'bg-cyan-500' },
                       ].map((item) => (
                         <div key={item.num} className="flex items-start gap-3">
                           <div className={`w-8 h-8 rounded-lg ${item.color} text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm`}>
@@ -774,9 +774,9 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                       <div className="text-[10px] font-bold text-red-400 uppercase tracking-wider mb-2">Prompt mediocre</div>
                       <p className="text-xs text-red-700 font-mono">"Hazme un plan de marketing"</p>
                     </div>
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-                      <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider mb-2">Prompt profesional</div>
-                      <p className="text-xs text-emerald-700 font-mono">"Eres un CMO con 15 años en e-commerce. Mi tienda vende... Crea un plan de 90 días con..."</p>
+                    <div className="bg-cyan-50 border border-cyan-200 rounded-xl p-3">
+                      <div className="text-[10px] font-bold text-cyan-500 uppercase tracking-wider mb-2">Prompt profesional</div>
+                      <p className="text-xs text-cyan-700 font-mono">"Eres un CMO con 15 años en e-commerce. Mi tienda vende... Crea un plan de 90 días con..."</p>
                     </div>
                   </div>
                 </div>
@@ -792,7 +792,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">¿Cuánto gana</span> un Prompt Engineer?
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">¿Cuánto gana</span> un Prompt Engineer?
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   El mercado valora esta habilidad. No necesitas ser programador.
@@ -815,16 +815,16 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                         <div className="h-8 bg-slate-100 rounded-full overflow-hidden relative">
                           {/* Min range */}
                           <div
-                            className="absolute top-0 h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-amber-300 to-amber-400"
+                            className="absolute top-0 h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-pink-300 to-pink-400"
                             style={{ left: `${(role.min / maxVal) * 100}%`, width: `${((role.max - role.min) / maxVal) * 100}%`, transitionDelay: `${i * 200}ms` }}
                           />
                           {/* Average marker */}
                           <div
-                            className="absolute top-0 h-full w-1 bg-orange-600 shadow-md z-10 transition-all duration-1000 ease-out"
+                            className="absolute top-0 h-full w-1 bg-rose-600 shadow-md z-10 transition-all duration-1000 ease-out"
                             style={{ left: `${(role.avg / maxVal) * 100}%`, transitionDelay: `${i * 200 + 400}ms` }}
                           />
                           <div
-                            className="absolute -top-6 text-[10px] font-bold text-orange-600 transition-all duration-1000"
+                            className="absolute -top-6 text-[10px] font-bold text-rose-600 transition-all duration-1000"
                             style={{ left: `${(role.avg / maxVal) * 100}%`, transform: 'translateX(-50%)', transitionDelay: `${i * 200 + 400}ms` }}
                           >
                             ${role.avg}K avg
@@ -837,7 +837,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
 
                 <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-3">
                   {[
-                    { label: 'Crecimiento anual', value: '+15%', icon: TrendingUp, color: 'text-emerald-600' },
+                    { label: 'Crecimiento anual', value: '+15%', icon: TrendingUp, color: 'text-cyan-600' },
                     { label: 'No requiere programar', value: '✓', icon: CheckCircle, color: 'text-blue-600' },
                     { label: 'Demanda hasta', value: '2030+', icon: Calendar, color: 'text-purple-600' },
                   ].map((stat, i) => (
@@ -914,7 +914,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                         <div className="px-5 pb-5 bg-white border-t border-slate-100">
                           <p className="text-sm text-slate-600 leading-relaxed mt-3 mb-3">{comp.desc}</p>
                           <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2">
-                            <Lightbulb className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                            <Lightbulb className="w-4 h-4 text-pink-500 flex-shrink-0" />
                             <p className="text-xs text-slate-600"><strong>Analogía:</strong> {comp.analogy}</p>
                           </div>
                         </div>
@@ -971,8 +971,8 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                       {[
                         { icon: Brain, label: 'Modelo', value: 'GPT-4o', color: 'text-violet-500' },
                         { icon: FileText, label: 'System Prompt', value: 'Asistente dental amable', color: 'text-blue-500' },
-                        { icon: Wrench, label: 'Tools', value: 'CRM + Calendar', color: 'text-emerald-500' },
-                        { icon: Database, label: 'Knowledge', value: 'Catálogo de servicios', color: 'text-amber-500' },
+                        { icon: Wrench, label: 'Tools', value: 'CRM + Calendar', color: 'text-cyan-500' },
+                        { icon: Database, label: 'Knowledge', value: 'Catálogo de servicios', color: 'text-pink-500' },
                         { icon: Zap, label: 'Trigger', value: 'Chat del sitio web', color: 'text-rose-500' },
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-slate-50">
@@ -984,24 +984,24 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4">
-                    <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Impacto</h4>
+                  <div className="bg-gradient-to-br from-cyan-50 to-sky-50 border border-cyan-200 rounded-2xl p-4">
+                    <h4 className="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-2">Impacto</h4>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="text-center">
-                        <div className="text-2xl font-black text-emerald-700">45s</div>
-                        <div className="text-[10px] text-emerald-600 font-bold">Tiempo de respuesta</div>
+                        <div className="text-2xl font-black text-cyan-700">45s</div>
+                        <div className="text-[10px] text-cyan-600 font-bold">Tiempo de respuesta</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-black text-emerald-700">0%</div>
-                        <div className="text-[10px] text-emerald-600 font-bold">Intervención humana</div>
+                        <div className="text-2xl font-black text-cyan-700">0%</div>
+                        <div className="text-[10px] text-cyan-600 font-bold">Intervención humana</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-black text-emerald-700">24/7</div>
-                        <div className="text-[10px] text-emerald-600 font-bold">Disponibilidad</div>
+                        <div className="text-2xl font-black text-cyan-700">24/7</div>
+                        <div className="text-[10px] text-cyan-600 font-bold">Disponibilidad</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-black text-emerald-700">+40%</div>
-                        <div className="text-[10px] text-emerald-600 font-bold">Conversión leads</div>
+                        <div className="text-2xl font-black text-cyan-700">+40%</div>
+                        <div className="text-[10px] text-cyan-600 font-bold">Conversión leads</div>
                       </div>
                     </div>
                   </div>
@@ -1062,7 +1062,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                                 disabled={quizSubmitted}
                                 className={`w-full text-left p-3 rounded-xl border-2 text-sm transition-all ${
                                   showResult && optCorrect
-                                    ? 'bg-emerald-50 border-emerald-400 text-emerald-800'
+                                    ? 'bg-cyan-50 border-cyan-400 text-cyan-800'
                                     : showResult && isSelected && !optCorrect
                                       ? 'bg-red-50 border-red-300 text-red-700'
                                       : isSelected
@@ -1071,7 +1071,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
                                 }`}
                               >
                                 <div className="flex items-center gap-2">
-                                  {showResult && optCorrect && <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />}
+                                  {showResult && optCorrect && <CheckCircle className="w-4 h-4 text-cyan-500 flex-shrink-0" />}
                                   {opt}
                                 </div>
                               </button>
@@ -1081,7 +1081,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
 
                         {quizSubmitted && (
                           <div className={`mt-3 ml-11 p-3 rounded-xl text-xs ${
-                            isCorrect ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                            isCorrect ? 'bg-cyan-50 text-cyan-700' : 'bg-rose-50 text-rose-700'
                           }`}>
                             <strong>{isCorrect ? '¡Correcto!' : 'Respuesta correcta:'}</strong> {q.explanation}
                           </div>

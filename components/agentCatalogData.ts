@@ -16,8 +16,8 @@ export interface CatalogAgent {
 }
 
 export const DIFFICULTY_CONFIG: Record<Difficulty, { label: string; color: string; bg: string; dots: number }> = {
-  beginner: { label: 'Principiante', color: 'text-emerald-600', bg: 'bg-emerald-100', dots: 1 },
-  intermediate: { label: 'Intermedio', color: 'text-amber-600', bg: 'bg-amber-100', dots: 2 },
+  beginner: { label: 'Principiante', color: 'text-cyan-600', bg: 'bg-cyan-100', dots: 1 },
+  intermediate: { label: 'Intermedio', color: 'text-indigo-600', bg: 'bg-indigo-100', dots: 2 },
   advanced: { label: 'Avanzado', color: 'text-rose-600', bg: 'bg-rose-100', dots: 3 },
 };
 
