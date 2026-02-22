@@ -98,7 +98,14 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
 
             return (
               <button key={day.id}
-                onClick={() => unlocked && setRoute(day.id)}
+                onClick={() => {
+                  if (!unlocked) return;
+                  if (day.id === AppRoute.DAY_4) {
+                    window.open('https://consultor-de-agentes-ia-975119016078.us-west1.run.app', '_blank');
+                  } else {
+                    setRoute(day.id);
+                  }
+                }}
                 disabled={!unlocked}
                 className={`group relative overflow-hidden rounded-3xl p-6 md:p-8 text-left transition-all duration-300 bg-white/80 backdrop-blur-md border shadow-lg ${
                   unlocked
