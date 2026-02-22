@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Home from './components/Home';
 import Day1 from './components/Day1';
 import Day2 from './components/Day2';
@@ -36,6 +37,7 @@ const App: React.FC = () => {
       <div className="app-container">
         {renderContent()}
         <AdminPanel />
+        <SpeedInsights />
       </div>
     </AdminProvider>
   );
