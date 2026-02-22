@@ -4,7 +4,6 @@ import { AppRoute } from '../types';
 import { COLORS } from '../constants';
 import { isDayUnlocked, getUnlockLabel, getTimeUntilUnlock } from '../utils/unlockSystem';
 import { useAdmin } from '../contexts/AdminContext';
-import { buildCTAUrl, trackCTAClick } from '../services/trackingService';
 
 interface HomeProps {
   setRoute: (route: AppRoute) => void;
@@ -24,31 +23,42 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
     {
       id: AppRoute.DAY_1,
       title: "Día 1: Fundamentos",
-      desc: "Domina la teoría y los conceptos clave.",
+      desc: "Domina la teoría y los conceptos clave de la IA.",
       icon: "🧠",
-      color: "from-blue-500 to-cyan-400"
+      color: "from-blue-500 to-cyan-400",
+      highlight: "La revolución exponencial"
     },
     {
       id: AppRoute.DAY_2,
-      title: "Día 2: Estudio Creativo",
-      desc: "Crea imágenes y videos de impacto.",
+      title: "Día 2: Taller de Prompts",
+      desc: "Crea prompts profesionales y descubre tus casos de uso.",
       icon: "🎨",
-      color: "from-purple-500 to-pink-400"
+      color: "from-purple-500 to-pink-400",
+      highlight: "Prompt Engineering + Agentes"
     },
     {
       id: AppRoute.DAY_3,
-      title: "Día 3: Consultoría",
-      desc: "Asesoramiento de carrera personalizado.",
+      title: "Día 3: Consultoría IA",
+      desc: "Asesoramiento de carrera personalizado con IA.",
       icon: "💼",
-      color: "from-amber-500 to-orange-400"
+      color: "from-amber-500 to-orange-400",
+      highlight: "Tu futuro profesional"
     },
     {
       id: AppRoute.DAY_4,
-      title: "Día 4: Negocio IA",
-      desc: "Auditoría y automatización empresarial.",
+      title: "Día 4: Negocio + IA",
+      desc: "Auditoría y agentes IA para tu negocio real.",
       icon: "🚀",
-      color: "from-emerald-500 to-teal-400"
+      color: "from-emerald-500 to-teal-400",
+      highlight: "ROI inmediato"
     },
+  ];
+
+  const stats = [
+    { value: '13.000+', label: 'Alumnos formados' },
+    { value: '500K+', label: 'Comunidad' },
+    { value: '4.6★', label: 'Trustpilot' },
+    { value: '60', label: 'Créditos ECTS' },
   ];
 
   return (
@@ -56,16 +66,21 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
       <div className="flex flex-col items-center">
 
         {/* Hero Section */}
-        <div className="text-center max-w-5xl mb-8 md:mb-12 animate-fade-in-up pt-4 md:pt-8">
+        <div className="text-center max-w-5xl mb-8 md:mb-10 animate-fade-in-up pt-4 md:pt-8">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200/60 text-pink-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
+            <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
+            Semana de Lanzamiento — IA Heroes
+          </div>
+
           <h1 className="text-4xl md:text-6xl font-black text-slate-800 mb-4 md:mb-6 leading-tight">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#243F4C] to-[#FF2878]">
-              Tu Transformación Exponencial
+              Tu Transformación con IA
             </span>
             <br />
             Empieza Aquí
           </h1>
-          <p className="text-lg md:text-xl text-slate-600 mb-6 md:mb-8 leading-relaxed px-4">
-            Una experiencia inmersiva de 4 días diseñada para empresarios y emprendedores que quieren liderar la revolución de la Inteligencia Artificial.
+          <p className="text-lg md:text-xl text-slate-600 mb-2 leading-relaxed px-4 max-w-2xl mx-auto">
+            4 días de experiencia inmersiva con herramientas reales de Inteligencia Artificial. Aprende, practica y transforma tu forma de trabajar.
           </p>
         </div>
 
@@ -77,7 +92,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
         )}
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-5xl mb-12 md:mb-16 px-2 md:px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-5xl mb-8 px-2 md:px-4">
           {days.map((day, idx) => {
             const unlocked = isDayUnlocked(day.id, isAdmin);
 
@@ -139,6 +154,15 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
                     </span>
                   )}
                 </p>
+
+                {/* Highlight badge */}
+                {unlocked && (
+                  <div className="mt-3 relative z-10">
+                    <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-gradient-to-r ${day.color} text-white opacity-80`}>
+                      {day.highlight}
+                    </span>
+                  </div>
+                )}
               </button>
             );
           })}
@@ -179,54 +203,74 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
           </button>
         </div>
 
-        {/* Value Proposition Section */}
-        <div className="w-full max-w-6xl bg-[#243F4C] text-white rounded-[2rem] md:rounded-[2.5rem] p-6 py-10 md:p-16 shadow-2xl relative overflow-hidden mb-8 md:mb-12">
-          {/* Decorative Circles */}
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-[#FF2878] opacity-10 blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-blue-500 opacity-10 blur-3xl"></div>
-
-          <div className="relative z-10 text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold mb-4">¿Por qué IA Heroes Pro?</h2>
-            <p className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto">
-              No es otro curso online. Es un programa universitario de transformación profesional.
-            </p>
+        {/* Stats bar */}
+        <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            {stats.map((stat, i) => (
+              <div key={i} className="bg-white rounded-2xl p-4 md:p-5 text-center border border-slate-100 shadow-sm">
+                <div className="text-2xl md:text-3xl font-black text-[#243F4C] mb-1">{stat.value}</div>
+                <div className="text-xs md:text-sm text-slate-500 font-medium">{stat.label}</div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 text-center">
-            <div className="space-y-3 md:space-y-4">
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto text-2xl md:text-3xl mb-4 backdrop-blur-sm">
-                🎓
-              </div>
-              <h3 className="text-lg md:text-xl font-bold text-white">Titulación Universitaria</h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                60 créditos ECTS avalados por la <strong>Western Europe University</strong>. Un título de prestigio para tu CV.
-              </p>
-            </div>
-            <div className="space-y-3 md:space-y-4">
-               <div className="w-14 h-14 md:w-16 md:h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto text-2xl md:text-3xl mb-4 backdrop-blur-sm">
-                🤝
-              </div>
-              <h3 className="text-lg md:text-xl font-bold text-white">Comunidad de Élite</h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                Networking real con empresarios y emprendedores que, como tú, apuestan por el futuro.
-              </p>
-            </div>
-            <div className="space-y-3 md:space-y-4">
-               <div className="w-14 h-14 md:w-16 md:h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto text-2xl md:text-3xl mb-4 backdrop-blur-sm">
-                💰
-              </div>
-              <h3 className="text-lg md:text-xl font-bold text-white">ROI Inmediato</h3>
-              <p className="text-slate-300 text-sm leading-relaxed">
-                Enfoque 100% práctico. Crea agentes, automatiza procesos y recupera tu inversión aplicando lo aprendido.
-              </p>
+        {/* What you'll learn section */}
+        <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
+          <div className="bg-gradient-to-br from-slate-50 to-white rounded-2xl border border-slate-200 p-6 md:p-8">
+            <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-6 text-center">¿Qué vas a aprender esta semana?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                { icon: '⚡', title: 'Fundamentos de IA Generativa', desc: 'Qué es, cómo funciona y por qué cambia las reglas del juego.' },
+                { icon: '✍️', title: 'Prompt Engineering', desc: 'Técnicas para comunicarte eficazmente con cualquier modelo de IA.' },
+                { icon: '🤖', title: 'Agentes de IA', desc: 'Crea empleados virtuales que trabajan por ti las 24 horas.' },
+                { icon: '📊', title: 'IA aplicada a tu negocio', desc: 'Analiza tu empresa y descubre oportunidades de automatización.' },
+                { icon: '🎨', title: 'Generación de contenido', desc: 'Crea imágenes y videos con IA para marketing y comunicación.' },
+                { icon: '🎯', title: 'Tu caso de uso personal', desc: 'Descubre cómo la IA puede transformar tu día a día y tu carrera.' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all">
+                  <span className="text-2xl flex-shrink-0 mt-0.5">{item.icon}</span>
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-sm mb-1">{item.title}</h4>
+                    <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
 
-          <div className="relative z-10 mt-10 md:mt-12 text-center">
-             <a href={buildCTAUrl('home-hero')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('home-hero')} className="inline-block w-full md:w-auto bg-[#FF2878] text-white font-bold py-4 px-8 md:px-10 rounded-xl shadow-lg hover:shadow-xl hover:bg-[#e01b63] transition-all transform hover:scale-105">
-               Reserva tu Plaza Ahora
-             </a>
+        {/* Testimonials */}
+        <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
+          <div className="bg-gradient-to-br from-[#243F4C] to-[#1a3040] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-10 blur-3xl rounded-full -mr-16 -mt-16" />
+            <h3 className="text-xl md:text-2xl font-bold mb-6 text-center relative z-10">Lo que dicen nuestros alumnos</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+              {[
+                { name: 'Marisa', flag: '🇦🇷', age: 62, quote: 'Si yo, con 62 años, pude dominarlo... tú también puedes. Ha cambiado cómo trabajo cada día.' },
+                { name: 'Ivette', flag: '🇬🇧', age: 55, quote: 'Sentí que me abrían una puerta a otro mundo. Los agentes me ayudan a automatizar tareas que me llevaban horas.' },
+                { name: 'Edgar', flag: '🇻🇪', age: 64, quote: 'Pensaba que la IA no era para mí. Ahora es mi herramienta número uno de trabajo.' },
+              ].map((t, i) => (
+                <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                  <p className="text-sm text-slate-200 leading-relaxed mb-4 italic">"{t.quote}"</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{t.flag}</span>
+                    <div>
+                      <p className="font-bold text-white text-sm">{t.name}</p>
+                      <p className="text-[11px] text-slate-400">{t.age} años, alumna IA Heroes</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+
+        {/* Powered by */}
+        <div className="text-center mb-6">
+          <p className="text-sm text-slate-400">
+            Creado por <a href="https://learningheroes.com" target="_blank" rel="noopener noreferrer" className="font-bold text-slate-500 hover:text-[#FF2878] transition-colors">Learning Heroes</a> — Formación en IA para profesionales
+          </p>
         </div>
 
       </div>

@@ -202,19 +202,19 @@ export function getCTAConfig(sectionKey: string) {
   if (!config) return null;
 
   const titles: Record<string, string> = {
-    day1: '¡Estás absorbiendo conocimiento a toda velocidad!',
-    day2: '¡Tu creatividad con IA es impresionante!',
-    day3: '¡Gran conversación con tu consultor IA!',
-    day4: '¡Análisis completado con éxito!',
-    agents: '¡Ya tienes un equipo de agentes IA!',
+    day1: '¡Vas por muy buen camino!',
+    day2: '¡Tu creatividad con IA no tiene límites!',
+    day3: '¿Y si este fuera solo el primer paso?',
+    day4: '¡Imagina hacer esto con tu propio negocio!',
+    agents: '30 agentes es solo el principio',
   };
 
   const messages: Record<string, string> = {
-    day1: 'Imagina dominar estos conceptos en profundidad. En IA Heroes Pro tendrás 8 meses de formación universitaria con titulación.',
-    day2: 'Esto es solo el comienzo. En IA Heroes Pro aprenderás técnicas avanzadas de generación con todas las herramientas del mercado.',
-    day3: 'La IA puede transformar tu carrera. Reserva una llamada gratuita con nuestro equipo para diseñar tu plan personalizado.',
-    day4: 'Has visto cómo la IA puede analizar y optimizar un negocio real. En IA Heroes Pro, lo harás con el tuyo propio.',
-    agents: 'Ya tienes 30 agentes listos. En IA Heroes Pro aprenderás a crear agentes avanzados con herramientas, memoria y automatización.',
+    day1: 'Has probado una pequeña muestra de lo que la IA puede hacer. Más de 13.000 profesionales como tú ya se han formado con nosotros en un programa universitario de 8 meses con 60 ECTS y mentores expertos del sector.',
+    day2: 'Generar imágenes y vídeos es impresionante, pero en IA Heroes Pro dominarás 10 módulos completos: desde automatización hasta agentes autónomos, con acompañamiento de mentores y una comunidad de 500.000 profesionales.',
+    day3: 'Acabas de descubrir cómo la IA puede orientar tu carrera. Reserva una llamada gratuita y descubre cómo 13.000+ profesionales de 40 a 65 años ya están transformando su futuro con nuestro programa.',
+    day4: 'Has visto el poder de la IA aplicada a negocios reales. En IA Heroes Pro trabajarás con tu propio negocio durante 8 meses, con mentores como Arnau Ramió y Javier Sáez guiándote paso a paso.',
+    agents: 'Estos 30 agentes son un aperitivo. En IA Heroes Pro aprenderás a construir agentes avanzados con memoria, herramientas y automatizaciones — dentro de un programa universitario valorado con 4,6★ en Trustpilot.',
   };
 
   return {
