@@ -143,6 +143,41 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
           })}
         </div>
 
+        {/* Agent Catalog Banner */}
+        <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
+          <button onClick={() => setRoute(AppRoute.AGENTS)}
+            className="group w-full relative overflow-hidden rounded-2xl p-6 md:p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-gradient-to-br from-[#243F4C] via-[#1a3040] to-[#0f2028] border border-white/10"
+          >
+            {/* Decorative grid */}
+            <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-15 blur-3xl rounded-full -mr-16 -mt-16 group-hover:opacity-25 transition-opacity" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-400 opacity-10 blur-3xl rounded-full -ml-10 -mb-10" />
+
+            <div className="relative z-10 flex items-center gap-5">
+              <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-3xl md:text-4xl group-hover:scale-110 transition-transform duration-300">
+                🤖
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-pink-300 bg-pink-500/20 px-2.5 py-0.5 rounded-full">30 agentes</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-300 bg-emerald-500/20 px-2.5 py-0.5 rounded-full">Siempre accesible</span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-black text-white mb-1 leading-tight">
+                  Tu Ejército de Agentes IA
+                </h3>
+                <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+                  30 empleados virtuales con System Prompts profesionales listos para copiar y usar.
+                </p>
+              </div>
+              <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center text-white group-hover:bg-[#FF2878] transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </div>
+            </div>
+          </button>
+        </div>
+
         {/* Value Proposition Section */}
         <div className="w-full max-w-6xl bg-[#243F4C] text-white rounded-[2rem] md:rounded-[2.5rem] p-6 py-10 md:p-16 shadow-2xl relative overflow-hidden mb-8 md:mb-12">
           {/* Decorative Circles */}

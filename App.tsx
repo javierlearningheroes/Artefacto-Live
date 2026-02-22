@@ -4,6 +4,7 @@ import Day1 from './components/Day1';
 import Day2 from './components/Day2';
 import Day3 from './components/Day3';
 import Day4 from './components/Day4';
+import AgentCatalog from './components/AgentCatalog';
 import { AppRoute } from './types';
 import { AdminProvider } from './contexts/AdminContext';
 
@@ -22,6 +23,8 @@ const App: React.FC = () => {
         return <Day3 setRoute={setRoute} />;
       case AppRoute.DAY_4:
         return <Day4 setRoute={setRoute} />;
+      case AppRoute.AGENTS:
+        return <AgentCatalog setRoute={setRoute} />;
       default:
         return <Home setRoute={setRoute} />;
     }

@@ -10,6 +10,7 @@ export enum AppRoute {
   DAY_2 = 'day2',
   DAY_3 = 'day3',
   DAY_4 = 'day4',
+  AGENTS = 'agents',
 }
 
 export interface DayConfig {
