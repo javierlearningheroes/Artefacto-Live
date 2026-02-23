@@ -295,14 +295,6 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
 
   return (
     <Layout title="Tu Ejército de Agentes IA" onBack={() => setRoute(AppRoute.HOME)}>
-      <CTAModal
-        isOpen={ctaOpen}
-        onClose={() => setCTAOpen(false)}
-        title={ctaConfig?.title}
-        message={ctaConfig?.message}
-        ctaUrl={ctaConfig?.url}
-        ctaSource="agents"
-      />
       <div className="space-y-6 pb-10">
 
         {/* Hero banner */}
@@ -485,22 +477,6 @@ const AgentCatalog: React.FC<AgentCatalogProps> = ({ setRoute }) => {
           </div>
         )}
 
-        {/* Bottom CTA */}
-        <div className="bg-gradient-to-r from-[#FF2878] to-[#ff4a90] rounded-2xl p-6 md:p-8 text-center text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          <div className="relative z-10">
-            <h3 className="text-xl md:text-2xl font-black mb-2">¿Quieres crear agentes más potentes?</h3>
-            <p className="text-white/80 text-sm md:text-base mb-5 max-w-lg mx-auto">
-              En IA Heroes Pro aprenderás a construir agentes avanzados con herramientas, memoria y automatización.
-            </p>
-            <a href={buildCTAUrl('agents-bottom')} target="_blank" rel="noopener noreferrer"
-              onClick={() => trackCTAClick('agents-bottom')}
-              className="inline-block bg-white text-[#FF2878] font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-            >
-              Descubre IA Heroes Pro
-            </a>
-          </div>
-        </div>
       </div>
     </Layout>
   );

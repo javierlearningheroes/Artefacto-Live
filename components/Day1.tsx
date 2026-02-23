@@ -32,9 +32,7 @@ const SECTIONS = [
   { id: 'what-is-ai', title: '¿Qué es la IA?', icon: '🧠', color: '#6366f1' },
   { id: 'prompting', title: 'Prompt Engineering', icon: '🗣️', color: '#61F2F2' },
   { id: 'salaries', title: 'Salarios', icon: '💰', color: '#FF2878' },
-  { id: 'agents', title: 'Agentes IA', icon: '🤖', color: '#8b5cf6' },
   { id: 'agent-demo', title: 'Demo en Vivo', icon: '⚡', color: '#ec4899' },
-  { id: 'quiz', title: 'Test Final', icon: '🎯', color: '#243F4C' },
 ];
 
 // Chart data for investment waves
@@ -854,99 +852,8 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             </div>
           )}
 
-          {/* ═══════ SECTION 4: AGENTS ═══════ */}
+          {/* ═══════ SECTION 4: AGENT DEMO ═══════ */}
           {activeSection === 4 && (
-            <div className="space-y-6">
-              <div className="text-center mb-4">
-                <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">Anatomía de un Agente IA</span>
-                </h2>
-                <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-                  De "la IA me responde" a "la IA hace cosas por mí". Estos son los 5 ingredientes.
-                </p>
-              </div>
-
-              {/* Agent architecture - 5 components */}
-              <div className="space-y-3">
-                {agentComponents.map((comp, idx) => {
-                  const Icon = comp.icon;
-                  const isExpanded = expandedAgent === comp.id;
-
-                  return (
-                    <button
-                      key={comp.id}
-                      onClick={() => setExpandedAgent(isExpanded ? null : comp.id)}
-                      className={`w-full text-left rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
-                        isExpanded
-                          ? `${comp.borderColor} shadow-lg`
-                          : 'border-slate-200 hover:border-slate-300 shadow-sm'
-                      }`}
-                      style={{ animationDelay: `${idx * 100}ms` }}
-                    >
-                      <div className={`flex items-center gap-4 p-4 md:p-5 ${isExpanded ? comp.bgLight : 'bg-white'}`}>
-                        {/* Number */}
-                        <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${comp.color} text-white flex items-center justify-center font-black text-sm shadow-md flex-shrink-0`}>
-                          {idx + 1}
-                        </div>
-
-                        {/* Icon */}
-                        <div className={`w-12 h-12 rounded-xl ${comp.bgLight} ${comp.textColor} flex items-center justify-center flex-shrink-0`}>
-                          <Icon className="w-6 h-6" />
-                        </div>
-
-                        {/* Text */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-bold text-slate-800">{comp.name}</span>
-                            <span className={`text-xs font-semibold ${comp.textColor} bg-white px-2 py-0.5 rounded-full border ${comp.borderColor}`}>
-                              {comp.subtitle}
-                            </span>
-                          </div>
-                          {!isExpanded && (
-                            <p className="text-xs text-slate-500 mt-0.5 truncate">{comp.analogy}</p>
-                          )}
-                        </div>
-
-                        <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} />
-                      </div>
-
-                      {isExpanded && (
-                        <div className="px-5 pb-5 bg-white border-t border-slate-100">
-                          <p className="text-sm text-slate-600 leading-relaxed mt-3 mb-3">{comp.desc}</p>
-                          <div className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2">
-                            <Lightbulb className="w-4 h-4 text-pink-500 flex-shrink-0" />
-                            <p className="text-xs text-slate-600"><strong>Analogía:</strong> {comp.analogy}</p>
-                          </div>
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Visual summary */}
-              <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 md:p-6 text-center">
-                <p className="text-slate-400 text-xs uppercase tracking-wider font-bold mb-3">Fórmula del Agente</p>
-                <div className="flex items-center justify-center gap-2 flex-wrap text-white">
-                  {agentComponents.map((comp, idx) => (
-                    <React.Fragment key={comp.id}>
-                      <div className={`px-3 py-1.5 rounded-lg bg-gradient-to-r ${comp.color} text-xs font-bold shadow-md`}>
-                        {comp.subtitle}
-                      </div>
-                      {idx < agentComponents.length - 1 && <span className="text-slate-500 font-bold">+</span>}
-                    </React.Fragment>
-                  ))}
-                  <span className="text-slate-500 font-bold">=</span>
-                  <div className="px-4 py-1.5 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 text-sm font-black shadow-lg animate-glow">
-                    🤖 Agente IA
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ═══════ SECTION 5: AGENT DEMO ═══════ */}
-          {activeSection === 5 && (
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
@@ -1019,118 +926,6 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             </div>
           )}
 
-          {/* ═══════ SECTION 6: QUIZ ═══════ */}
-          {activeSection === 6 && (
-            <div className="space-y-6">
-              <div className="text-center mb-4">
-                <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-700 to-slate-900">Test Final</span>
-                </h2>
-                <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-                  Comprueba cuánto has aprendido. 4 preguntas rápidas.
-                </p>
-              </div>
-
-              <div className="space-y-4 max-w-2xl mx-auto">
-                {quizQuestions.map((q, qIdx) => {
-                  const answered = quizAnswers[qIdx] !== undefined;
-                  const isCorrect = quizAnswers[qIdx] === q.correct;
-
-                  return (
-                    <div key={qIdx} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                      <div className="p-4 md:p-5">
-                        <div className="flex items-start gap-3 mb-4">
-                          <div className="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
-                            {qIdx + 1}
-                          </div>
-                          <h3 className="font-bold text-slate-800 text-sm md:text-base">{q.q}</h3>
-                        </div>
-
-                        <div className="space-y-2 ml-11">
-                          {q.options.map((opt, optIdx) => {
-                            const isSelected = quizAnswers[qIdx] === optIdx;
-                            const showResult = quizSubmitted || answered;
-                            const optCorrect = optIdx === q.correct;
-
-                            return (
-                              <button
-                                key={optIdx}
-                                onClick={() => {
-                                  if (quizSubmitted) return;
-                                  setQuizAnswers(prev => ({ ...prev, [qIdx]: optIdx }));
-                                }}
-                                disabled={quizSubmitted}
-                                className={`w-full text-left p-3 rounded-xl border-2 text-sm transition-all ${
-                                  showResult && optCorrect
-                                    ? 'bg-cyan-50 border-cyan-400 text-cyan-800'
-                                    : showResult && isSelected && !optCorrect
-                                      ? 'bg-red-50 border-red-300 text-red-700'
-                                      : isSelected
-                                        ? 'bg-indigo-50 border-indigo-400 text-indigo-800'
-                                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
-                                }`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  {showResult && optCorrect && <CheckCircle className="w-4 h-4 text-cyan-500 flex-shrink-0" />}
-                                  {opt}
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </div>
-
-                        {quizSubmitted && (
-                          <div className={`mt-3 ml-11 p-3 rounded-xl text-xs ${
-                            isCorrect ? 'bg-cyan-50 text-cyan-700' : 'bg-rose-50 text-rose-700'
-                          }`}>
-                            <strong>{isCorrect ? '¡Correcto!' : 'Respuesta correcta:'}</strong> {q.explanation}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {!quizSubmitted && Object.keys(quizAnswers).length === quizQuestions.length && (
-                  <button
-                    onClick={() => setQuizSubmitted(true)}
-                    className="w-full py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition text-lg flex items-center justify-center gap-2"
-                  >
-                    <CheckCircle className="w-5 h-5" /> Comprobar Respuestas
-                  </button>
-                )}
-
-                {quizSubmitted && (
-                  <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 text-center text-white shadow-xl">
-                    <div className="text-5xl font-black mb-2">
-                      {quizScore}/{quizQuestions.length}
-                    </div>
-                    <p className="text-slate-400 mb-4">
-                      {quizScore === quizQuestions.length
-                        ? '¡Perfecto! Dominas los fundamentos.'
-                        : quizScore >= 3
-                          ? '¡Muy bien! Casi lo tienes todo.'
-                          : '¡Buen intento! Revisa las secciones anteriores.'}
-                    </p>
-                    <div className="flex justify-center gap-3">
-                      <button
-                        onClick={() => { setQuizAnswers({}); setQuizSubmitted(false); }}
-                        className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-bold transition"
-                      >
-                        Reintentar
-                      </button>
-                      <button
-                        onClick={() => setRoute(AppRoute.HOME)}
-                        className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-sm font-bold transition shadow-lg"
-                      >
-                        Volver al inicio
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
 
         </div>
 
