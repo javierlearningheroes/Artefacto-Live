@@ -55,10 +55,9 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
   ];
 
   const stats = [
-    { value: '13.000+', label: 'Alumnos formados' },
-    { value: '500K+', label: 'Comunidad' },
+    { value: '19.000+', label: 'Alumnos formados' },
+    { value: '1M+', label: 'Comunidad' },
     { value: '4.6★', label: 'Trustpilot' },
-    { value: '60', label: 'Créditos ECTS' },
   ];
 
   return (
@@ -179,8 +178,12 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
 
         {/* Agent Catalog Banner */}
         <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
-          <button onClick={() => setRoute(AppRoute.AGENTS)}
-            className="group w-full relative overflow-hidden rounded-2xl p-6 md:p-8 text-left transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-gradient-to-br from-[#243F4C] via-[#1a3040] to-[#0f2028] border border-white/10"
+          {(() => {
+            const agentsUnlocked = isDayUnlocked(AppRoute.AGENTS, isAdmin);
+            return (
+          <button onClick={() => { if (agentsUnlocked) setRoute(AppRoute.AGENTS); }}
+            disabled={!agentsUnlocked}
+            className={`group w-full relative overflow-hidden rounded-2xl p-6 md:p-8 text-left transition-all duration-300 bg-gradient-to-br from-[#243F4C] via-[#1a3040] to-[#0f2028] border border-white/10 ${agentsUnlocked ? 'hover:shadow-2xl hover:-translate-y-1 cursor-pointer' : 'opacity-60 grayscale cursor-not-allowed'}`}
           >
             {/* Decorative grid */}
             <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
@@ -189,12 +192,11 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
 
             <div className="relative z-10 flex items-center gap-5">
               <div className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-3xl md:text-4xl group-hover:scale-110 transition-transform duration-300">
-                🤖
+                🦾
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-pink-200/80 bg-pink-500/10 px-2.5 py-0.5 rounded-full">30 agentes</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-300/80 bg-white/5 px-2.5 py-0.5 rounded-full">Siempre accesible</span>
                 </div>
                 <h3 className="text-xl md:text-2xl font-black text-white mb-1 leading-tight">
                   Tu Ejército de Agentes IA
@@ -208,13 +210,23 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </div>
+            {!agentsUnlocked && (
+              <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                {getUnlockLabel(AppRoute.AGENTS)}
+              </div>
+            )}
             </div>
           </button>
+            );
+          })()}
         </div>
 
         {/* Stats bar */}
         <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
             {stats.map((stat, i) => (
               <div key={i} className="bg-white rounded-2xl p-4 md:p-5 text-center border border-slate-100 shadow-sm">
                 <div className="text-2xl md:text-3xl font-black text-[#243F4C] mb-1">{stat.value}</div>
@@ -249,28 +261,58 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
           </div>
         </div>
 
-        {/* Testimonials */}
+        {/* Trustpilot Reviews */}
         <div className="w-full max-w-5xl px-2 md:px-4 mb-8">
           <div className="bg-gradient-to-br from-[#243F4C] to-[#1a3040] rounded-2xl p-6 md:p-8 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#FF2878] opacity-[0.05] blur-3xl rounded-full -mr-16 -mt-16" />
-            <h3 className="text-xl md:text-2xl font-bold mb-6 text-center relative z-10">Lo que dicen nuestros alumnos</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
-              {[
-                { name: 'Marisa', flag: '🇦🇷', age: 62, quote: 'Si yo, con 62 años, pude dominarlo... tú también puedes. Ha cambiado cómo trabajo cada día.' },
-                { name: 'Ivette', flag: '🇬🇧', age: 55, quote: 'Sentí que me abrían una puerta a otro mundo. Los agentes me ayudan a automatizar tareas que me llevaban horas.' },
-                { name: 'Edgar', flag: '🇻🇪', age: 64, quote: 'Pensaba que la IA no era para mí. Ahora es mi herramienta número uno de trabajo.' },
-              ].map((t, i) => (
-                <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
-                  <p className="text-sm text-slate-200 leading-relaxed mb-4 italic">"{t.quote}"</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{t.flag}</span>
-                    <div>
-                      <p className="font-bold text-white text-sm">{t.name}</p>
-                      <p className="text-[11px] text-slate-400">{t.age} años, alumna IA Heroes</p>
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="flex items-center gap-3 mb-2">
+                <svg viewBox="0 0 126 31" xmlns="http://www.w3.org/2000/svg" className="h-7 md:h-8">
+                  <path d="M33.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L27.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
+                  <path d="M52.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L46.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
+                  <path d="M71.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L65.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
+                  <path d="M90.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L84.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
+                  <path d="M109.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4l3.6-2.5 3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#DCDCE6"/>
+                </svg>
+              </div>
+              <p className="text-3xl md:text-4xl font-black mb-1">4.6 / 5</p>
+              <p className="text-slate-300 text-sm mb-5">Basado en +1.800 opiniones verificadas en Trustpilot</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-6">
+                {[
+                  { name: 'Marisa', flag: '🇦🇷', age: 62, gender: 'alumna', quote: 'Si yo, con 62 años, pude dominarlo... tú también puedes. Ha cambiado cómo trabajo cada día.' },
+                  { name: 'Ivette', flag: '🇬🇧', age: 55, gender: 'alumna', quote: 'Sentí que me abrían una puerta a otro mundo. Los agentes me ayudan a automatizar tareas que me llevaban horas.' },
+                  { name: 'Edgar', flag: '🇻🇪', age: 64, gender: 'alumno', quote: 'Pensaba que la IA no era para mí. Ahora es mi herramienta número uno de trabajo.' },
+                ].map((t, i) => (
+                  <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                    <div className="flex gap-0.5 mb-3">
+                      {[1,2,3,4,5].map(s => (
+                        <svg key={s} viewBox="0 0 20 20" className="w-4 h-4" fill="#00B67A"><path d="M10 1l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.2 4.8 17l1-5.8L1.6 7.1l5.8-.8z"/></svg>
+                      ))}
+                    </div>
+                    <p className="text-sm text-slate-200 leading-relaxed mb-4 italic">"{t.quote}"</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{t.flag}</span>
+                      <div>
+                        <p className="font-bold text-white text-sm">{t.name}</p>
+                        <p className="text-[11px] text-slate-400">{t.age} años, {t.gender} IA Heroes</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              <a
+                href="https://www.trustpilot.com/review/learningheroes.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#00B67A] text-white font-semibold text-sm hover:bg-[#00a06a] transition-colors"
+              >
+                Ver todas las opiniones en Trustpilot
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>

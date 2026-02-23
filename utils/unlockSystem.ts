@@ -57,6 +57,11 @@ const UNLOCK_SCHEDULE: UnlockEntry[] = [
     label: 'Jueves 26 Feb · 21:00h',
     unlockUTC: madridToUTC(2026, 2, 26, 21, 0),
   },
+  {
+    dayId: AppRoute.AGENTS,
+    label: 'Lunes 23 Feb · 21:00h',
+    unlockUTC: madridToUTC(2026, 2, 23, 21, 0),
+  },
 ];
 
 // The CTA banner shares Day 3's unlock time

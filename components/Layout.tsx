@@ -27,6 +27,21 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
         </a>
       )}
 
+      {/* Floating Aula Virtual Button — always visible, top-right */}
+      <a
+        href="https://classroom.learningheroes.com/ia-heroes-14-ln?utm_source=artefacto&utm_medium=platform&utm_campaign=ia-heroes"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`fixed right-3 md:right-5 z-50 flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-white text-xs md:text-sm font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-xl ${showBanner ? 'top-[56px] md:top-[58px]' : 'top-3 md:top-4'}`}
+        style={{ backgroundColor: COLORS.accent }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+        </svg>
+        <span className="hidden md:inline">Aula Virtual</span>
+        <span className="md:hidden">Aula</span>
+      </a>
+
       {/* Header */}
       {showHeader && (
         <header className={`bg-white border-b border-slate-200 py-3 px-4 md:py-4 md:px-6 flex items-center justify-between shadow-sm sticky z-40 ${showBanner ? 'top-[48px]' : 'top-0'}`}>
@@ -42,19 +57,6 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
               {title}
             </h1>
           </div>
-          <a
-            href="https://classroom.learningheroes.com/ia-heroes-14-ln?utm_source=artefacto&utm_medium=platform&utm_campaign=ia-heroes"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2 rounded-lg text-white text-xs md:text-sm font-semibold transition-all hover:opacity-90 hover:scale-105 flex-shrink-0 shadow-sm"
-            style={{ backgroundColor: COLORS.accent }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-            </svg>
-            <span className="hidden md:inline">Aula Virtual</span>
-            <span className="md:hidden">Aula</span>
-          </a>
         </header>
       )}
 
