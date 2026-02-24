@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Layout from './Layout';
 import CTAModal from './CTAModal';
 import { AppRoute, ChatMessage } from '../types';
@@ -243,14 +244,17 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
                 } ${msg.isError ? 'bg-red-50 border-red-200 text-red-600' : ''}`}
                   style={isUser ? { backgroundColor: accentColor } : undefined}
                 >
-                  <ReactMarkdown components={{
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
                     p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
                     strong: ({node, ...props}) => <strong className={`font-semibold ${isUser ? 'text-white' : 'text-gray-900'}`} {...props} />,
                     ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
                     ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
-                    table: ({node, ...props}) => <div className="overflow-x-auto my-2"><table className="w-full border-collapse text-xs" {...props} /></div>,
-                    th: ({node, ...props}) => <th className="border border-gray-200 px-2 py-1 text-left font-semibold text-gray-700 bg-gray-50" {...props} />,
-                    td: ({node, ...props}) => <td className="border border-gray-200 px-2 py-1 text-gray-600" {...props} />,
+                    table: ({node, ...props}) => <div className="overflow-x-auto my-3 rounded-lg border border-gray-200 shadow-sm"><table className="w-full border-collapse text-xs" {...props} /></div>,
+                    thead: ({node, ...props}) => <thead className="bg-[#243F4C] text-white text-[11px] uppercase tracking-wider" {...props} />,
+                    tbody: ({node, ...props}) => <tbody className="divide-y divide-gray-100" {...props} />,
+                    tr: ({node, ...props}) => <tr className="hover:bg-gray-50/50 transition-colors" {...props} />,
+                    th: ({node, ...props}) => <th className="px-3 py-2 text-left font-semibold whitespace-nowrap" {...props} />,
+                    td: ({node, ...props}) => <td className="px-3 py-2 text-gray-600" {...props} />,
                   }}>{msg.text}</ReactMarkdown>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Layout from './Layout';
 import CTAModal from './CTAModal';
 import { AppRoute } from '../types';
@@ -142,6 +143,7 @@ const Day4: React.FC<Day4Props> = ({ setRoute }) => {
                  </h3>
                  <div className="max-w-none text-slate-600">
                     <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
                       components={{
                         p: ({node, ...props}) => <p className="text-slate-600 mb-4 leading-relaxed" {...props} />,
                         strong: ({node, ...props}) => <strong className="font-bold text-[#243F4C]" {...props} />,
@@ -174,6 +176,7 @@ const Day4: React.FC<Day4Props> = ({ setRoute }) => {
 
                         <div className="p-6 flex-1 flex flex-col">
                           <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
                             components={{
                                 h3: ({node, ...props}) => <h3 className="text-xl font-bold text-[#243F4C] mb-4 pb-3 border-b border-slate-100" {...props} />,
                                 p: ({node, ...props}) => <p className="text-slate-600 mb-4 text-sm leading-relaxed" {...props} />,

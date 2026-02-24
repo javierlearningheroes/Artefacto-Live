@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Layout from './Layout';
 import CTAModal from './CTAModal';
 import { AppRoute, ChatMessage } from '../types';
@@ -93,6 +94,7 @@ const Day3: React.FC<Day3Props> = ({ setRoute }) => {
                     : 'bg-white text-slate-700 border border-slate-200 rounded-tl-none'
                 } ${msg.isError ? 'border-red-500 bg-red-50 text-red-800' : ''}`}>
                   <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
                     components={{
                       p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
                       strong: ({node, ...props}) => (
@@ -104,6 +106,12 @@ const Day3: React.FC<Day3Props> = ({ setRoute }) => {
                       h1: ({node, ...props}) => <h3 className="font-bold text-base mb-1 mt-1" {...props} />,
                       h2: ({node, ...props}) => <h3 className="font-bold text-base mb-1 mt-1" {...props} />,
                       h3: ({node, ...props}) => <h3 className="font-bold text-sm mb-1 mt-1" {...props} />,
+                      table: ({node, ...props}) => <div className="overflow-x-auto my-3 rounded-lg border border-slate-200 shadow-sm"><table className="w-full border-collapse text-sm" {...props} /></div>,
+                      thead: ({node, ...props}) => <thead className="bg-[#243F4C] text-white text-xs uppercase tracking-wider" {...props} />,
+                      tbody: ({node, ...props}) => <tbody className="divide-y divide-slate-100" {...props} />,
+                      tr: ({node, ...props}) => <tr className="hover:bg-slate-50 transition-colors" {...props} />,
+                      th: ({node, ...props}) => <th className="px-3 py-2 text-left font-semibold whitespace-nowrap" {...props} />,
+                      td: ({node, ...props}) => <td className="px-3 py-2 text-slate-600" {...props} />,
                     }}
                   >
                     {msg.text}
