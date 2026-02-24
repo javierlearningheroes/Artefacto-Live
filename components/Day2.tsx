@@ -215,7 +215,7 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
       <div className="relative z-10 flex flex-col h-full bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
         {/* Header */}
         <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
-          <img src="/agents-icon.png" alt="Agente IA" className="w-10 h-10 rounded-xl object-contain" />
+          <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#243F4C] to-[#FF2878] flex items-center justify-center text-2xl shadow-sm">🤖</span>
           <div className="flex-1">
             <div className="font-bold text-sm text-gray-800">
               {isPersonal ? 'Consultor Personal IA' : 'Consultor Profesional IA'}
@@ -235,7 +235,7 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
             return (
               <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                 {!isUser && (
-                  <img src="/agents-icon.png" alt="" className="w-7 h-7 rounded-lg mr-2.5 mt-1 flex-shrink-0 object-contain" />
+                  <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#243F4C] to-[#FF2878] flex items-center justify-center text-sm mr-2.5 mt-1 flex-shrink-0">🤖</span>
                 )}
                 <div className={`max-w-[82%] px-4 py-3 text-[13px] leading-relaxed ${
                   isUser
@@ -264,7 +264,7 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
           {/* Typing indicator */}
           {isLoading && (
             <div className="flex justify-start items-end">
-              <img src="/agents-icon.png" alt="" className="w-7 h-7 rounded-lg mr-2.5 flex-shrink-0 object-contain" />
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#243F4C] to-[#FF2878] flex items-center justify-center text-sm mr-2.5 flex-shrink-0">🤖</span>
               <div className="bg-gray-50 border border-gray-100 rounded-2xl rounded-tl-md px-4 py-3 flex items-center gap-2">
                 <span className="text-[11px] text-gray-400 font-medium">Pensando</span>
                 <div className="flex items-center gap-1">
