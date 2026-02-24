@@ -68,7 +68,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
         <div className="text-center max-w-5xl mb-8 md:mb-10 animate-fade-in-up pt-4 md:pt-8">
           <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200/60 text-slate-500 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
             <span className="w-2 h-2 rounded-full bg-[#FF2878]/60 animate-pulse" />
-            Semana de Lanzamiento — IA Heroes
+            Evento IA Heroes Live
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-slate-800 mb-4 md:mb-6 leading-tight">
@@ -272,7 +272,8 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
                   <path d="M52.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L46.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
                   <path d="M71.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L65.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
                   <path d="M90.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4L84.3 18l3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#00B67A"/>
-                  <path d="M109.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4l3.6-2.5 3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="#DCDCE6"/>
+                  <defs><linearGradient id="star5partial"><stop offset="60%" stopColor="#00B67A"/><stop offset="60%" stopColor="#DCDCE6"/></linearGradient></defs>
+                  <path d="M109.4 12.7l-4.2-.4-1.6-3.9c-.2-.4-.5-.4-.7 0l-1.6 3.9-4.2.4c-.4 0-.5.3-.2.5l3.2 2.8-.9 4.1c-.1.4.2.6.5.4l3.6-2.5 3.6 2.5c.3.2.6 0 .5-.4l-.9-4.1 3.2-2.8c.1-.2 0-.5-.3-.5z" fill="url(#star5partial)"/>
                 </svg>
               </div>
               <p className="text-3xl md:text-4xl font-black mb-1">4.6 / 5</p>
