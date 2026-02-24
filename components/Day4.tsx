@@ -140,8 +140,25 @@ const Day4: React.FC<Day4Props> = ({ setRoute }) => {
                    </svg>
                    Análisis del Negocio
                  </h3>
-                 <div className="prose prose-slate max-w-none text-slate-600">
-                    <ReactMarkdown>{intro}</ReactMarkdown>
+                 <div className="max-w-none text-slate-600">
+                    <ReactMarkdown
+                      components={{
+                        p: ({node, ...props}) => <p className="text-slate-600 mb-4 leading-relaxed" {...props} />,
+                        strong: ({node, ...props}) => <strong className="font-bold text-[#243F4C]" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc list-outside ml-4 mb-4 text-slate-600 space-y-1" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-4 mb-4 text-slate-600 space-y-1" {...props} />,
+                        table: ({node, ...props}) => <div className="overflow-x-auto my-4 rounded-lg border border-slate-200"><table className="w-full text-sm text-left" {...props} /></div>,
+                        thead: ({node, ...props}) => <thead className="bg-[#243F4C] text-white text-xs uppercase tracking-wider" {...props} />,
+                        tbody: ({node, ...props}) => <tbody className="divide-y divide-slate-200" {...props} />,
+                        tr: ({node, ...props}) => <tr className="hover:bg-slate-50 transition-colors" {...props} />,
+                        th: ({node, ...props}) => <th className="px-4 py-3 font-semibold whitespace-nowrap" {...props} />,
+                        td: ({node, ...props}) => <td className="px-4 py-3 text-slate-600" {...props} />,
+                        h3: ({node, ...props}) => <h3 className="text-lg font-bold text-[#243F4C] mt-4 mb-2" {...props} />,
+                        h4: ({node, ...props}) => <h4 className="text-base font-semibold text-[#243F4C] mt-3 mb-2" {...props} />,
+                      }}
+                    >
+                      {intro}
+                    </ReactMarkdown>
                  </div>
                </div>
              )}
@@ -163,6 +180,12 @@ const Day4: React.FC<Day4Props> = ({ setRoute }) => {
                                 strong: ({node, ...props}) => <span className="font-bold text-[#243F4C] bg-blue-50 px-2 py-1 rounded inline-block mb-1" {...props} />,
                                 ul: ({node, ...props}) => <ul className="list-disc list-outside ml-4 mb-4 text-sm text-slate-600 space-y-1" {...props} />,
                                 ol: ({node, ...props}) => <ol className="list-decimal list-outside ml-4 mb-4 text-sm text-slate-600 space-y-1" {...props} />,
+                                table: ({node, ...props}) => <div className="overflow-x-auto my-4 rounded-lg border border-slate-200"><table className="w-full text-sm text-left" {...props} /></div>,
+                                thead: ({node, ...props}) => <thead className="bg-[#243F4C] text-white text-xs uppercase tracking-wider" {...props} />,
+                                tbody: ({node, ...props}) => <tbody className="divide-y divide-slate-200" {...props} />,
+                                tr: ({node, ...props}) => <tr className="hover:bg-slate-50 transition-colors" {...props} />,
+                                th: ({node, ...props}) => <th className="px-4 py-3 font-semibold whitespace-nowrap" {...props} />,
+                                td: ({node, ...props}) => <td className="px-4 py-3 text-slate-600" {...props} />,
                                 code: ({node, inline, className, children, ...props}: any) => {
                                   if (inline) return <code className="bg-slate-100 text-pink-600 px-1 rounded font-mono text-xs" {...props}>{children}</code>;
 
