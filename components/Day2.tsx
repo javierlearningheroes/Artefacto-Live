@@ -11,7 +11,8 @@ import {
   ArrowRight, ArrowLeft, CheckCircle, Brain, Sparkles, Cpu,
   Target, Lightbulb, TrendingUp, Bot, Wrench, Zap, MessageSquare,
   ChevronDown, Eye, Copy, BookOpen, Layers, Play, User, Send,
-  Image, Video, Wand2, ArrowUpRight, RotateCcw, Star, Briefcase, Home as HomeIcon
+  Image, Video, Wand2, ArrowUpRight, RotateCcw, Star, Briefcase, Home as HomeIcon,
+  ArrowUp, Mic
 } from 'lucide-react';
 
 // ════════════════════════════════════════════════════════════════
@@ -118,7 +119,7 @@ const CopyButton = ({ text }: { text: string }) => {
   );
 };
 
-// ── Use Case Chat (Premium UI) ──
+// ── Use Case Chat (Clean White Floating UI) ──
 const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
   const isPersonal = type === 'personal';
 
@@ -129,9 +130,10 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'model', text: initialMessage }]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
@@ -164,153 +166,157 @@ const UseCaseChat = ({ type }: { type: 'personal' | 'professional' }) => {
     }
   };
 
-  const quickPrompts = isPersonal
-    ? ['Cuéntame sobre tu mañana típica', 'Qué hobbies tienes', 'Cómo organizas tu semana']
-    : ['Describe tu rol en la empresa', 'Qué herramientas usas a diario', 'Tu mayor reto profesional'];
+  // Speech-to-text with microphone
+  const toggleListening = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Tu navegador no soporta el dictado por voz. Usa Chrome o Edge.');
+      return;
+    }
+
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognitionRef.current = recognition;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0].transcript)
+        .join('');
+      setInput(transcript);
+    };
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+    recognition.start();
+  };
+
+  const accentColor = isPersonal ? '#FF2878' : '#243F4C';
 
   return (
-    <div className="relative flex flex-col h-[62vh] md:h-[58vh] overflow-hidden rounded-2xl">
-      {/* Glassmorphism container */}
-      <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-2xl rounded-2xl border border-white/[0.08]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-900/95 rounded-2xl" />
-
-      {/* Subtle ambient glow */}
-      <div className={`absolute -top-20 -right-20 w-60 h-60 rounded-full blur-[80px] opacity-[0.06] ${
-        isPersonal ? 'bg-pink-500' : 'bg-cyan-500'
-      }`} />
-      <div className={`absolute -bottom-20 -left-20 w-60 h-60 rounded-full blur-[80px] opacity-[0.04] ${
-        isPersonal ? 'bg-purple-500' : 'bg-indigo-500'
-      }`} />
-
-      {/* Header */}
-      <div className="relative z-10 px-5 py-4 border-b border-white/[0.06] flex items-center gap-3">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-lg ${
-          isPersonal
-            ? 'bg-gradient-to-br from-pink-500/80 to-rose-600/80'
-            : 'bg-gradient-to-br from-[#243F4C]/80 to-slate-600/80'
-        }`}>
-          <Sparkles className="w-4 h-4 text-white" />
-        </div>
-        <div className="flex-1">
-          <div className="font-semibold text-sm text-white/90 tracking-tight">
-            {isPersonal ? 'Consultor Personal' : 'Consultor Profesional'}
-          </div>
-          <div className="text-[11px] text-white/30 font-medium">Learning Heroes · IA Generativa</div>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 animate-pulse" />
-          <span className="text-[10px] text-white/30 font-medium">En línea</span>
-        </div>
+    <div className="relative flex flex-col h-[65vh] md:h-[60vh]">
+      {/* Animated background blobs */}
+      <div className="absolute inset-0 -m-4 overflow-hidden rounded-3xl">
+        <div className="absolute w-72 h-72 bg-pink-300/30 rounded-full blur-3xl -top-20 -left-20 animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute w-80 h-80 bg-blue-300/20 rounded-full blur-3xl -bottom-20 -right-20 animate-pulse" style={{ animationDuration: '8s', animationDelay: '2s' }} />
+        <div className="absolute w-60 h-60 bg-purple-300/20 rounded-full blur-3xl top-1/3 right-1/4 animate-pulse" style={{ animationDuration: '7s', animationDelay: '1s' }} />
+        <div className="absolute w-48 h-48 bg-cyan-300/15 rounded-full blur-3xl bottom-1/4 left-1/3 animate-pulse" style={{ animationDuration: '9s', animationDelay: '3s' }} />
       </div>
 
-      {/* Messages */}
-      <div className="relative z-10 flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
-        {messages.map((msg, idx) => {
-          const isUser = msg.role === 'user';
-          return (
-            <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-slide-up`}
-              style={{ animationDelay: `${Math.min(idx * 50, 200)}ms` }}>
-              {!isUser && (
-                <div className={`w-7 h-7 rounded-lg flex items-center justify-center mr-2.5 mt-1 flex-shrink-0 ${
-                  isPersonal
-                    ? 'bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/20'
-                    : 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20'
-                }`}>
-                  <Sparkles className={`w-3 h-3 ${isPersonal ? 'text-pink-400/80' : 'text-cyan-400/80'}`} />
+      {/* White floating card */}
+      <div className="relative z-10 flex flex-col h-full bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        {/* Header */}
+        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+          <img src="/agents-icon.png" alt="Agente IA" className="w-10 h-10 rounded-xl object-contain" />
+          <div className="flex-1">
+            <div className="font-bold text-sm text-gray-800">
+              {isPersonal ? 'Consultor Personal IA' : 'Consultor Profesional IA'}
+            </div>
+            <div className="text-[11px] text-gray-400 font-medium">Learning Heroes · Agente Inteligente</div>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: accentColor }} />
+            <span className="text-[10px] text-gray-400 font-medium">En línea</span>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+          {messages.map((msg, idx) => {
+            const isUser = msg.role === 'user';
+            return (
+              <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                {!isUser && (
+                  <img src="/agents-icon.png" alt="" className="w-7 h-7 rounded-lg mr-2.5 mt-1 flex-shrink-0 object-contain" />
+                )}
+                <div className={`max-w-[82%] px-4 py-3 text-[13px] leading-relaxed ${
+                  isUser
+                    ? 'text-white rounded-2xl rounded-br-md shadow-md'
+                    : 'bg-gray-50 text-gray-700 rounded-2xl rounded-tl-md border border-gray-100'
+                } ${msg.isError ? 'bg-red-50 border-red-200 text-red-600' : ''}`}
+                  style={isUser ? { backgroundColor: accentColor } : undefined}
+                >
+                  <ReactMarkdown components={{
+                    p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                    strong: ({node, ...props}) => <strong className={`font-semibold ${isUser ? 'text-white' : 'text-gray-900'}`} {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
+                    table: ({node, ...props}) => <div className="overflow-x-auto my-2"><table className="w-full border-collapse text-xs" {...props} /></div>,
+                    th: ({node, ...props}) => <th className="border border-gray-200 px-2 py-1 text-left font-semibold text-gray-700 bg-gray-50" {...props} />,
+                    td: ({node, ...props}) => <td className="border border-gray-200 px-2 py-1 text-gray-600" {...props} />,
+                  }}>{msg.text}</ReactMarkdown>
                 </div>
-              )}
-              <div className={`max-w-[82%] px-4 py-3 text-[13px] leading-relaxed ${
-                isUser
-                  ? 'bg-white/[0.08] text-white/90 rounded-2xl rounded-br-md border border-white/[0.06]'
-                  : 'bg-white/[0.03] text-white/70 rounded-2xl rounded-tl-md border border-white/[0.04]'
-              } ${msg.isError ? 'border-red-500/30 bg-red-500/10 text-red-300' : ''}`}>
-                <ReactMarkdown components={{
-                  p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
-                  strong: ({node, ...props}) => <strong className={`font-semibold ${isUser ? 'text-white' : 'text-white/90'}`} {...props} />,
-                  ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/60" {...props} />,
-                  ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/60" {...props} />,
-                  table: ({node, ...props}) => <div className="overflow-x-auto my-2"><table className="w-full border-collapse text-xs" {...props} /></div>,
-                  th: ({node, ...props}) => <th className="border border-white/10 px-2 py-1 text-left font-semibold text-white/70 bg-white/[0.03]" {...props} />,
-                  td: ({node, ...props}) => <td className="border border-white/10 px-2 py-1 text-white/50" {...props} />,
-                }}>{msg.text}</ReactMarkdown>
+              </div>
+            );
+          })}
+
+          {/* Typing indicator */}
+          {isLoading && (
+            <div className="flex justify-start items-end">
+              <img src="/agents-icon.png" alt="" className="w-7 h-7 rounded-lg mr-2.5 flex-shrink-0 object-contain" />
+              <div className="bg-gray-50 border border-gray-100 rounded-2xl rounded-tl-md px-4 py-3 flex items-center gap-2">
+                <span className="text-[11px] text-gray-400 font-medium">Pensando</span>
+                <div className="flex items-center gap-1">
+                  {[0, 1, 2].map(i => (
+                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-gray-300 animate-bounce"
+                      style={{ animationDelay: `${i * 150}ms`, animationDuration: '1s' }} />
+                  ))}
+                </div>
               </div>
             </div>
-          );
-        })}
-
-        {/* Typing indicator */}
-        {isLoading && (
-          <div className="flex justify-start items-end animate-slide-up">
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center mr-2.5 flex-shrink-0 ${
-              isPersonal
-                ? 'bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/20'
-                : 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20'
-            }`}>
-              <Sparkles className={`w-3 h-3 ${isPersonal ? 'text-pink-400/80' : 'text-cyan-400/80'}`} />
-            </div>
-            <div className="bg-white/[0.03] border border-white/[0.04] rounded-2xl rounded-tl-md px-4 py-3 flex items-center gap-2">
-              <span className="text-[11px] text-white/30 font-medium">Pensando</span>
-              <div className="flex items-center gap-1">
-                {[0, 1, 2].map(i => (
-                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce"
-                    style={{ animationDelay: `${i * 150}ms`, animationDuration: '1s' }} />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Quick prompts (only on first message) */}
-      {messages.length === 1 && !isLoading && (
-        <div className="relative z-10 px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide">
-          {quickPrompts.map((qp, i) => (
-            <button key={i} onClick={() => setInput(qp)}
-              className="flex-shrink-0 text-[11px] text-white/40 hover:text-white/70 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] px-3 py-1.5 rounded-full transition-all whitespace-nowrap">
-              {qp}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Input area */}
-      <div className="relative z-10 px-4 pb-4 pt-2">
-        <div className={`relative bg-white/[0.04] rounded-xl border transition-all duration-200 ${
-          isFocused ? 'border-white/[0.12] bg-white/[0.06]' : 'border-white/[0.06]'
-        }`}>
-          {/* Focus ring glow */}
-          {isFocused && (
-            <div className={`absolute -inset-px rounded-xl opacity-30 blur-sm ${
-              isPersonal ? 'bg-pink-500/20' : 'bg-cyan-500/20'
-            }`} />
           )}
+          <div ref={messagesEndRef} />
+        </div>
 
-          <div className="relative flex items-end gap-2 p-3">
+        {/* Input area — clean white */}
+        <div className="px-4 pb-4 pt-2 border-t border-gray-50">
+          <div className="flex items-end gap-2 bg-gray-50 rounded-xl border border-gray-200 p-3 focus-within:border-gray-300 focus-within:ring-1 focus-within:ring-gray-200 transition-all">
             <textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
               placeholder={isPersonal ? 'Cuéntame sobre tu día a día...' : 'Cuéntame sobre tu trabajo...'}
               rows={1}
-              className="flex-1 bg-transparent text-white/90 text-sm placeholder:text-white/20 outline-none resize-none min-h-[24px] max-h-[120px] leading-relaxed"
+              className="flex-1 bg-transparent text-gray-800 text-sm placeholder:text-gray-400 outline-none resize-none min-h-[24px] max-h-[120px] leading-relaxed"
             />
-            <button onClick={handleSend} disabled={isLoading || !input.trim()}
+
+            {/* Mic button */}
+            <button
+              onClick={toggleListening}
               className={`flex-shrink-0 p-2 rounded-lg transition-all duration-200 ${
+                isListening
+                  ? 'bg-red-500 text-white animate-pulse shadow-md'
+                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+              }`}
+              title={isListening ? 'Detener dictado' : 'Dictar por voz'}
+            >
+              <Mic className="w-4 h-4" />
+            </button>
+
+            {/* Send button */}
+            <button onClick={handleSend} disabled={isLoading || !input.trim()}
+              className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 ${
                 input.trim()
-                  ? 'bg-white/90 text-slate-900 shadow-lg shadow-white/10 hover:bg-white active:scale-95'
-                  : 'bg-white/[0.05] text-white/20'
-              }`}>
+                  ? 'text-white shadow-md hover:opacity-90 active:scale-95'
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
+              style={input.trim() ? { backgroundColor: accentColor } : undefined}
+            >
               {isLoading ? (
                 <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
               ) : (
-                <Send className="w-4 h-4" />
+                <ArrowUp className="w-4 h-4" />
               )}
             </button>
           </div>
