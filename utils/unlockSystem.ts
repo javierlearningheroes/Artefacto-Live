@@ -49,8 +49,8 @@ const UNLOCK_SCHEDULE: UnlockEntry[] = [
   },
   {
     dayId: AppRoute.DAY_3,
-    label: 'Miércoles 25 Feb · 20:30h',
-    unlockUTC: madridToUTC(2026, 2, 25, 20, 30),
+    label: 'Miércoles 25 Feb · 19:30h',
+    unlockUTC: madridToUTC(2026, 2, 25, 19, 30),
   },
   {
     dayId: AppRoute.DAY_4,

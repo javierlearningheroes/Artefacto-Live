@@ -4,7 +4,6 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import Home from './components/Home';
 import Day1 from './components/Day1';
 import Day2 from './components/Day2';
-import Day3 from './components/Day3';
 import Day4 from './components/Day4';
 import AgentCatalog from './components/AgentCatalog';
 
@@ -24,7 +23,10 @@ const App: React.FC = () => {
       case AppRoute.DAY_2:
         return <Day2 setRoute={setRoute} />;
       case AppRoute.DAY_3:
-        return <Day3 setRoute={setRoute} />;
+        // Day 3 is a redirect to HubSpot — handled in Home.tsx onClick
+        window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=day3', '_blank');
+        setRoute(AppRoute.HOME);
+        return <Home setRoute={setRoute} />;
       case AppRoute.DAY_4:
         return <Day4 setRoute={setRoute} />;
       case AppRoute.AGENTS:
