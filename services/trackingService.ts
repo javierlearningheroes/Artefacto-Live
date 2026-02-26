@@ -53,12 +53,9 @@ const CTA_THRESHOLDS: Record<string, { interactions: InteractionType[]; threshol
 };
 
 // ─── CTA Time Gate ──────────────────────────────────────────────────────
-// CTA popups only appear from Wednesday 25 Feb 2026 at 19:30 Madrid time
-// CET (winter) = UTC+1, so 19:30 Madrid = 18:30 UTC
-const CTA_UNLOCK_UTC = new Date(Date.UTC(2026, 1, 25, 18, 30, 0)); // Feb 25, 2026 19:30 CET
-
+// CTA popups are always enabled (no time gate)
 function isCTATimeUnlocked(): boolean {
-  return new Date() >= CTA_UNLOCK_UTC;
+  return true;
 }
 
 // ─── Storage Keys ───────────────────────────────────────────────────────

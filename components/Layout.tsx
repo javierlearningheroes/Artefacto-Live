@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { COLORS } from '../constants';
 import { isCTABannerVisible } from '../utils/unlockSystem';
 import { useAdmin } from '../contexts/AdminContext';
 import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
+import CTAModal from './CTAModal';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,10 +11,55 @@ interface LayoutProps {
   onBack?: () => void;
 }
 
+const GLOBAL_CTA_KEY = 'ia-heroes-global-cta-shown';
+
 const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
   const { isAdmin } = useAdmin();
   const showHeader = !!title || !!onBack;
   const showBanner = isCTABannerVisible(isAdmin);
+
+  // ─── Global CTA popup (time + clicks) ─────────────────────
+  const [showGlobalCTA, setShowGlobalCTA] = useState(false);
+  const globalClickCount = useRef(0);
+  const ctaAlreadyShown = useRef(false);
+
+  // Check if already shown this session
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(GLOBAL_CTA_KEY) === 'true') {
+        ctaAlreadyShown.current = true;
+      }
+    } catch {}
+  }, []);
+
+  const triggerGlobalCTA = () => {
+    if (ctaAlreadyShown.current || !showBanner) return; // Only show after CTA unlock time
+    ctaAlreadyShown.current = true;
+    try { sessionStorage.setItem(GLOBAL_CTA_KEY, 'true'); } catch {}
+    setShowGlobalCTA(true);
+  };
+
+  // Timer: 30 seconds
+  useEffect(() => {
+    if (!showBanner) return;
+    const timer = setTimeout(() => {
+      triggerGlobalCTA();
+    }, 30000);
+    return () => clearTimeout(timer);
+  }, [showBanner]);
+
+  // Click counter: 4 clicks anywhere
+  useEffect(() => {
+    if (!showBanner) return;
+    const handleClick = () => {
+      globalClickCount.current += 1;
+      if (globalClickCount.current >= 4) {
+        triggerGlobalCTA();
+      }
+    };
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [showBanner]);
 
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans text-slate-800">
@@ -69,6 +115,16 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
       <footer className="py-6 text-center text-slate-400 text-xs md:text-sm border-t border-slate-200 mt-auto">
         <p>2026 @ Learning Heroes.</p>
       </footer>
+
+      {/* Global CTA Popup — triggered by 30s timer or 4 clicks */}
+      <CTAModal
+        isOpen={showGlobalCTA}
+        onClose={() => setShowGlobalCTA(false)}
+        title="¿Quieres llevar esto al siguiente nivel?"
+        message="Lo que estás viendo es solo una muestra. En IA Heroes Pro dominarás la IA generativa con mentores expertos, un programa universitario de 8 meses y una comunidad de +500.000 profesionales."
+        ctaUrl={buildCTAUrl('global-popup')}
+        ctaSource="global-popup"
+      />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { AppRoute } from '../types';
 import { COLORS } from '../constants';
 import { isDayUnlocked, getUnlockLabel, getTimeUntilUnlock } from '../utils/unlockSystem';
 import { useAdmin } from '../contexts/AdminContext';
+import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
 
 interface HomeProps {
   setRoute: (route: AppRoute) => void;
@@ -12,6 +13,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ setRoute }) => {
   const { isAdmin } = useAdmin();
   const [, setTick] = useState(0);
+  const [showDay4Gate, setShowDay4Gate] = useState(false);
 
   // Update countdown every 30 seconds
   useEffect(() => {
@@ -100,9 +102,9 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
                 onClick={() => {
                   if (!unlocked) return;
                   if (day.id === AppRoute.DAY_3) {
-                    window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=banner&_gl=1*1bfcmi4*_gcl_au*MTM4MDYxNzE1LjE3NzE3OTE5NTU.', '_blank');
+                    window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=day3', '_blank');
                   } else if (day.id === AppRoute.DAY_4) {
-                    window.open('https://consultor-de-agentes-ia-975119016078.us-west1.run.app', '_blank');
+                    setShowDay4Gate(true);
                   } else {
                     setRoute(day.id);
                   }
@@ -326,6 +328,45 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
         </div>
 
       </div>
+
+      {/* Day 4 Gate Modal — Tool access requires reservation */}
+      {showDay4Gate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowDay4Gate(false)} />
+          <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden transform animate-fade-in-up">
+            {/* Header */}
+            <div className="h-32 bg-gradient-to-r from-[#243F4C] to-[#2a4d5e] relative flex items-center justify-center overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF2878] rounded-full blur-3xl opacity-10 -mr-10 -mt-10" />
+              <span className="text-6xl relative z-10">🔒</span>
+              <button onClick={() => setShowDay4Gate(false)} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-8 text-center">
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">Herramienta exclusiva para alumnos</h2>
+              <p className="text-slate-600 mb-6 text-lg leading-relaxed">
+                El Consultor de Agentes IA es una herramienta premium disponible para alumnos de IA Heroes Pro. Reserva una llamada gratuita y descubre cómo acceder a esta y muchas más herramientas.
+              </p>
+              <div className="space-y-3">
+                <a href={buildCTAUrl('day4-gate')} target="_blank" rel="noopener noreferrer"
+                  onClick={() => { trackCTAClick('day4-gate'); }}
+                  className="block w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-lg hover:shadow-xl hover:brightness-110 transition-all transform hover:scale-[1.02]"
+                  style={{ backgroundColor: COLORS.accent }}>
+                  📞 Reserva tu llamada gratuita
+                </a>
+                <button onClick={() => {
+                  setShowDay4Gate(false);
+                  window.open('https://consultor-de-agentes-ia-975119016078.us-west1.run.app', '_blank');
+                }} className="block w-full py-3 px-6 rounded-xl font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-colors">
+                  Probar la demo igualmente →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

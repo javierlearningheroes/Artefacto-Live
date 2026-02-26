@@ -81,10 +81,9 @@ export function isDayUnlocked(dayId: AppRoute, isAdmin: boolean = false): boolea
   return new Date() >= entry.unlockUTC;
 }
 
-/** Check whether the CTA banner should be visible */
+/** Check whether the CTA banner should be visible — always visible now */
 export function isCTABannerVisible(isAdmin: boolean = false): boolean {
-  if (isAdmin) return true;
-  return new Date() >= CTA_BANNER_UNLOCK;
+  return true;
 }
 
 /** Get the human-readable unlock label for a day */
