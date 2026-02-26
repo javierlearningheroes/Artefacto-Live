@@ -54,8 +54,8 @@ const UNLOCK_SCHEDULE: UnlockEntry[] = [
   },
   {
     dayId: AppRoute.DAY_4,
-    label: 'Jueves 26 Feb · 21:00h',
-    unlockUTC: madridToUTC(2026, 2, 26, 21, 0),
+    label: 'Disponible',
+    unlockUTC: new Date(0), // Unlocked immediately
   },
   {
     dayId: AppRoute.AGENTS,
