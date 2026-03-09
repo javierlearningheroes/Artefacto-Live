@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { COLORS } from '../constants';
-import { isCTABannerVisible } from '../utils/unlockSystem';
 import { useAdmin } from '../contexts/AdminContext';
 import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
-import CTAModal from './CTAModal';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,74 +9,40 @@ interface LayoutProps {
   onBack?: () => void;
 }
 
-const GLOBAL_CTA_KEY = 'ia-heroes-global-cta-shown';
+const POST_EVENT_KEY = 'ia-heroes-post-event-shown';
 
 const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
   const { isAdmin } = useAdmin();
   const showHeader = !!title || !!onBack;
-  const showBanner = isCTABannerVisible(isAdmin);
 
-  // ─── Global CTA popup (time + clicks) ─────────────────────
-  const [showGlobalCTA, setShowGlobalCTA] = useState(false);
-  const globalClickCount = useRef(0);
-  const ctaAlreadyShown = useRef(false);
+  // ─── Post-event popup (shows immediately on first visit) ──────
+  const [showPostEvent, setShowPostEvent] = useState(false);
 
-  // Check if already shown this session
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(GLOBAL_CTA_KEY) === 'true') {
-        ctaAlreadyShown.current = true;
+      if (sessionStorage.getItem(POST_EVENT_KEY) !== 'true') {
+        setShowPostEvent(true);
+        sessionStorage.setItem(POST_EVENT_KEY, 'true');
       }
     } catch {}
   }, []);
 
-  const triggerGlobalCTA = () => {
-    if (ctaAlreadyShown.current || !showBanner) return; // Only show after CTA unlock time
-    ctaAlreadyShown.current = true;
-    try { sessionStorage.setItem(GLOBAL_CTA_KEY, 'true'); } catch {}
-    setShowGlobalCTA(true);
-  };
-
-  // Timer: 30 seconds
-  useEffect(() => {
-    if (!showBanner) return;
-    const timer = setTimeout(() => {
-      triggerGlobalCTA();
-    }, 30000);
-    return () => clearTimeout(timer);
-  }, [showBanner]);
-
-  // Click counter: 4 clicks anywhere
-  useEffect(() => {
-    if (!showBanner) return;
-    const handleClick = () => {
-      globalClickCount.current += 1;
-      if (globalClickCount.current >= 4) {
-        triggerGlobalCTA();
-      }
-    };
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-  }, [showBanner]);
-
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans text-slate-800">
-      {/* Sticky Promo Banner — visible from Wednesday 25 Feb 20:30 CET */}
-      {showBanner && (
-        <a href={buildCTAUrl('banner')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('banner')} className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2" style={{ backgroundColor: COLORS.primary }}>
-          <span className="text-xs md:text-base truncate md:overflow-visible">🚀 ¿Quieres dominar la IA? Únete al programa IA Heroes Pro</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </a>
-      )}
+      {/* Sticky Promo Banner */}
+      <a href={buildCTAUrl('banner-post')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('banner-post')} className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2" style={{ backgroundColor: COLORS.primary }}>
+        <span className="text-xs md:text-base truncate md:overflow-visible">🚀 ¿Quieres dominar la IA? Reserva tu llamada gratuita</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
 
       {/* Floating Aula Virtual Button — always visible, top-right */}
       <a
         href="https://classroom.learningheroes.com/ia-heroes-14-ln?utm_source=artefacto&utm_medium=platform&utm_campaign=ia-heroes"
         target="_blank"
         rel="noopener noreferrer"
-        className={`fixed right-3 md:right-5 z-50 flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-white text-xs md:text-sm font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-xl ${showBanner ? 'top-[56px] md:top-[58px]' : 'top-3 md:top-4'}`}
+        className="fixed right-3 md:right-5 z-50 flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-white text-xs md:text-sm font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-xl top-[56px] md:top-[58px]"
         style={{ backgroundColor: COLORS.accent }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -90,7 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
 
       {/* Header */}
       {showHeader && (
-        <header className={`bg-white border-b border-slate-200 py-3 px-4 md:py-4 md:px-6 flex items-center justify-between shadow-sm sticky z-40 ${showBanner ? 'top-[48px]' : 'top-0'}`}>
+        <header className="bg-white border-b border-slate-200 py-3 px-4 md:py-4 md:px-6 flex items-center justify-between shadow-sm sticky z-40 top-[48px]">
           <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
             {onBack && (
               <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition flex-shrink-0" aria-label="Volver">
@@ -116,15 +80,50 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
         <p>2026 @ Learning Heroes.</p>
       </footer>
 
-      {/* Global CTA Popup — triggered by 30s timer or 4 clicks */}
-      <CTAModal
-        isOpen={showGlobalCTA}
-        onClose={() => setShowGlobalCTA(false)}
-        title="¿Quieres llevar esto al siguiente nivel?"
-        message="Lo que estás viendo es solo una muestra. En IA Heroes Pro dominarás la IA generativa con mentores expertos, un programa universitario de 8 meses y una comunidad de +500.000 profesionales."
-        ctaUrl={buildCTAUrl('global-popup')}
-        ctaSource="global-popup"
-      />
+      {/* Post-Event Popup — shows immediately on page load */}
+      {showPostEvent && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 animate-fade-in">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowPostEvent(false)} />
+          <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden transform animate-fade-in-up">
+            {/* Decorative Header */}
+            <div className="h-36 bg-gradient-to-r from-[#243F4C] to-[#2a4d5e] relative flex flex-col items-center justify-center overflow-hidden">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#FF2878] rounded-full blur-3xl opacity-15 -mr-16 -mt-16" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-400 rounded-full blur-3xl opacity-10 -ml-10 -mb-10" />
+              <span className="text-6xl relative z-10 mb-2">🎉</span>
+              <p className="text-white/80 text-sm font-medium relative z-10">IA Heroes Live 14</p>
+              <button onClick={() => setShowPostEvent(false)} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-8 text-center">
+              <h2 className="text-2xl font-bold text-slate-800 mb-3">
+                ¡Gracias por este evento increíble!
+              </h2>
+              <p className="text-slate-600 mb-3 text-base leading-relaxed">
+                Ha sido una semana inolvidable descubriendo juntos el poder de la IA generativa. Todas las herramientas que has probado aquí siguen disponibles para los alumnos de IA Heroes Pro.
+              </p>
+              <p className="text-slate-600 mb-6 text-base leading-relaxed">
+                <span className="font-semibold text-[#243F4C]">¡Enhorabuena a todos los que ya se han unido!</span> Si tú también quieres dar el paso, reserva tu llamada gratuita y descubre cómo transformar tu carrera con IA.
+              </p>
+
+              <div className="space-y-3">
+                <a href={buildCTAUrl('post-event')} target="_blank" rel="noopener noreferrer"
+                  onClick={() => trackCTAClick('post-event')}
+                  className="block w-full py-4 px-6 rounded-xl font-bold text-white text-lg shadow-lg hover:shadow-xl hover:brightness-110 transition-all transform hover:scale-[1.02]"
+                  style={{ backgroundColor: COLORS.accent }}>
+                  📞 Reserva tu llamada gratuita
+                </a>
+                <button onClick={() => setShowPostEvent(false)} className="block w-full py-3 px-6 rounded-xl font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-colors">
+                  Seguir explorando las herramientas
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
