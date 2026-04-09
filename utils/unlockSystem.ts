@@ -1,7 +1,7 @@
 import { AppRoute } from '../types';
 
 // ============================================================
-// UNLOCK SCHEDULE — IA Heroes Live 14
+// UNLOCK SCHEDULE — IA Heroes Live 15
 // All times in Europe/Madrid timezone
 // ============================================================
 
@@ -31,40 +31,43 @@ function madridToUTC(year: number, month: number, day: number, hour: number, min
   });
 
   // Brute-force approach: we know CET is UTC+1 and CEST is UTC+2
-  // Feb 23-26 2026 is winter time (CET = UTC+1)
-  const offset = 1; // hours ahead of UTC
+  // Apr 13-16 2026 is summer time (CEST = UTC+2)
+  const offset = 2; // hours ahead of UTC
   return new Date(Date.UTC(year, month - 1, day, hour - offset, minute, 0));
 }
+
+// Main event countdown — Monday 13 Apr at 19:00h Madrid
+export const EVENT_START = madridToUTC(2026, 4, 13, 19, 0);
 
 const UNLOCK_SCHEDULE: UnlockEntry[] = [
   {
     dayId: AppRoute.DAY_1,
-    label: 'Lunes 23 Feb · 21:00h',
-    unlockUTC: madridToUTC(2026, 2, 23, 21, 0),
+    label: 'Lunes 13 Abr · 20:30h',
+    unlockUTC: madridToUTC(2026, 4, 13, 20, 30),
   },
   {
     dayId: AppRoute.DAY_2,
-    label: 'Martes 24 Feb · 21:00h',
-    unlockUTC: madridToUTC(2026, 2, 24, 21, 0),
+    label: 'Martes 14 Abr · 20:30h',
+    unlockUTC: madridToUTC(2026, 4, 14, 20, 30),
   },
   {
     dayId: AppRoute.DAY_3,
-    label: 'Miércoles 25 Feb · 19:30h',
-    unlockUTC: madridToUTC(2026, 2, 25, 19, 30),
+    label: 'Miércoles 15 Abr · 20:30h',
+    unlockUTC: madridToUTC(2026, 4, 15, 20, 30),
   },
   {
     dayId: AppRoute.DAY_4,
-    label: 'Disponible',
-    unlockUTC: new Date(0), // Unlocked immediately
+    label: 'Jueves 16 Abr · 20:30h',
+    unlockUTC: madridToUTC(2026, 4, 16, 20, 30),
   },
   {
     dayId: AppRoute.AGENTS,
-    label: 'Lunes 23 Feb · 21:00h',
-    unlockUTC: madridToUTC(2026, 2, 23, 21, 0),
+    label: 'Lunes 13 Abr · 20:30h',
+    unlockUTC: madridToUTC(2026, 4, 13, 20, 30),
   },
 ];
 
-// The CTA banner shares Day 3's unlock time
+// The CTA banner shares Day 3's unlock time (Wednesday 20:30h)
 export const CTA_BANNER_UNLOCK = UNLOCK_SCHEDULE[2].unlockUTC;
 
 // ============================================================

@@ -101,7 +101,9 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
               <button key={day.id}
                 onClick={() => {
                   if (!unlocked) return;
-                  if (day.id === AppRoute.DAY_3) {
+                  if (day.id === AppRoute.DAY_1 || day.id === AppRoute.DAY_2) {
+                    window.open('https://programas.learningheroes.com/IA-heroes/vip', '_blank');
+                  } else if (day.id === AppRoute.DAY_3) {
                     window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=day3', '_blank');
                   } else if (day.id === AppRoute.DAY_4) {
                     setShowDay4Gate(true);
