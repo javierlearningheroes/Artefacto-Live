@@ -24,7 +24,7 @@ const App: React.FC = () => {
         return <Day2 setRoute={setRoute} />;
       case AppRoute.DAY_3:
         // Day 3 is a redirect to HubSpot — handled in Home.tsx onClick
-        window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=day3', '_blank');
+        window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH15&utm_source=Live&utm_medium=artefacto&utm_content=day3', '_blank');
         setRoute(AppRoute.HOME);
         return <Home setRoute={setRoute} />;
       case AppRoute.DAY_4:

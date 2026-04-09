@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { COLORS } from '../constants';
 import { useAdmin } from '../contexts/AdminContext';
 import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
+import { isDayUnlocked } from '../utils/unlockSystem';
+import { AppRoute } from '../types';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,7 +22,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
 
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(POST_EVENT_KEY) !== 'true') {
+      // Only show post-event popup after the last day (Day 4) has unlocked
+      const eventEnded = isDayUnlocked(AppRoute.DAY_4);
+      if (eventEnded && sessionStorage.getItem(POST_EVENT_KEY) !== 'true') {
         setShowPostEvent(true);
         sessionStorage.setItem(POST_EVENT_KEY, 'true');
       }
@@ -39,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
 
       {/* Floating Aula Virtual Button — always visible, top-right */}
       <a
-        href="https://classroom.learningheroes.com/ia-heroes-14-ln?utm_source=artefacto&utm_medium=platform&utm_campaign=ia-heroes"
+        href="https://classroom.learningheroes.com/ia-heroes-15-ln?utm_source=artefacto&utm_medium=platform&utm_campaign=ia-heroes"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed right-3 md:right-5 z-50 flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-white text-xs md:text-sm font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-xl top-[56px] md:top-[58px]"
@@ -90,7 +94,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
               <div className="absolute top-0 right-0 w-40 h-40 bg-[#FF2878] rounded-full blur-3xl opacity-15 -mr-16 -mt-16" />
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-400 rounded-full blur-3xl opacity-10 -ml-10 -mb-10" />
               <span className="text-6xl relative z-10 mb-2">🎉</span>
-              <p className="text-white/80 text-sm font-medium relative z-10">IA Heroes Live 14</p>
+              <p className="text-white/80 text-sm font-medium relative z-10">IA Heroes Live 15</p>
               <button onClick={() => setShowPostEvent(false)} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

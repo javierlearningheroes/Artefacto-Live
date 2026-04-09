@@ -168,7 +168,7 @@ export function trackCTAClick(source: string) {
 export function buildCTAUrl(trigger: string): string {
   const baseUrl = 'https://programas.learningheroes.com/ia-heroes/reserva-llamada';
   const params = new URLSearchParams({
-    utm_campaign: 'IAH14',
+    utm_campaign: 'IAH15',
     utm_source: 'Live',
     utm_medium: 'artefacto',
     utm_content: trigger,
