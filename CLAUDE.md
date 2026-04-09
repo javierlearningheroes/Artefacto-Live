@@ -1,20 +1,12 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## Project Overview
 
-**IA Heroes - Semana de Lanzamiento** is an interactive educational/marketing web application built for [Learning Heroes](https://programas.learningheroes.com/ia-heroes/). It showcases generative AI capabilities across a 4-day experience targeting entrepreneurs and business professionals (40-60 age range, Spanish-speaking).
+**IA Heroes - Semana de Lanzamiento** is an interactive educational/marketing web application for [Learning Heroes](https://programas.learningheroes.com/ia-heroes/). It showcases generative AI capabilities across a multi-day experience targeting Spanish-speaking entrepreneurs and business professionals (40-60 age range).
 
-The app was originally created in [Google AI Studio](https://ai.studio/apps/fd0e1c54-f751-4805-8bce-3733554da1e8) and uses the Google Gemini API for all AI features.
-
-## Tech Stack
-
-- **Framework**: React 19 with TypeScript
-- **Build tool**: Vite 6
-- **Styling**: Tailwind CSS (loaded via CDN `<script>` tag in `index.html`, no local config)
-- **AI SDK**: `@google/genai` (Google Gemini)
-- **Icons**: `lucide-react`
-- **Charts**: `recharts`
-- **Markdown**: `react-markdown`
+Originally created in [Google AI Studio](https://ai.studio/apps/fd0e1c54-f751-4805-8bce-3733554da1e8) and uses the Google Gemini API for all AI features. Deployed on Vercel.
 
 ## Commands
 
@@ -25,72 +17,65 @@ npm run build        # Production build via Vite
 npm run preview      # Preview production build
 ```
 
-There are no test, lint, or formatting commands configured.
-
-## Project Structure
-
-```
-/
-├── index.html           # Entry HTML (Tailwind CDN, importmap, meta tags, GTM)
-├── index.tsx            # React entry point (renders <App /> into #root)
-├── App.tsx              # Root component with client-side routing via useState
-├── types.ts             # Shared TypeScript interfaces and enums
-├── constants.ts         # Theme colors, IA Heroes course content, AI system prompts
-├── components/
-│   ├── Layout.tsx       # Shared layout: sticky promo banner, header, footer
-│   ├── CTAModal.tsx     # Reusable CTA modal that links to campaign URL
-│   ├── Home.tsx         # Landing page with day navigation cards
-│   ├── Day1.tsx         # Day 1: AI fundamentals (slides, charts, interactive content)
-│   ├── Day2.tsx         # Day 2: Creative studio (image/video generation)
-│   ├── Day3.tsx         # Day 3: AI career consultant chatbot
-│   └── Day4.tsx         # Day 4: Business analysis with AI agents
-├── services/
-│   └── geminiService.ts # All Gemini API calls (text, image, video, chat, search)
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
-```
-
-**Important:** `geminiService.ts` currently sits at root level, but components import it as `../services/geminiService` and the file itself imports `../constants`. These paths only resolve correctly if the file is inside a `services/` subdirectory. To fix local builds, move it to `services/geminiService.ts`. The `@/*` path alias maps to the project root.
-
-## Architecture
-
-### Routing
-
-Client-side routing is implemented via `useState<AppRoute>` in `App.tsx` — there is no router library. The `AppRoute` enum (`types.ts`) defines: `HOME`, `DAY_1`, `DAY_2`, `DAY_3`, `DAY_4`. Each page component receives `setRoute` as a prop to navigate.
-
-### AI Service Layer (`geminiService.ts`)
-
-All Gemini API calls are centralized here. Two client patterns exist:
-- **`getEnvClient()`** — uses `process.env.API_KEY` (injected by Vite from `GEMINI_API_KEY` in `.env.local`). Used for standard-tier models.
-- **`getUserClient()`** — for premium models (Veo video). Checks `window.aistudio.hasSelectedApiKey()` for the AI Studio environment.
-
-Functions:
-| Function | Model | Purpose |
-|---|---|---|
-| `enhancePrompt()` | `gemini-3-flash-preview` | Improves user prompts for image/video generation |
-| `generateImage()` | `gemini-2.5-flash-image` | Generates images from text prompts |
-| `generateVideo()` | `veo-3.1-fast-generate-preview` | Generates videos with polling loop |
-| `sendConsultantMessage()` | `gemini-3-flash-preview` | Multi-turn career consultant chat |
-| `analyzeBusiness()` | `gemini-3-flash-preview` | Business analysis with Google Search grounding |
-
-### Shared Components
-
-- **`Layout`** — wraps every page. Includes a sticky pink promo banner at top, optional back button + title header, and footer. All day pages use `<Layout title="..." onBack={...}>`.
-- **`CTAModal`** — a promotional modal that appears after key interactions (image generation, chat response, business analysis). Links to the campaign URL `https://live.learningheroes.com/iah-artefact`.
-
-### Day Pages
-
-- **Day1** (~1138 lines) — The largest component. Contains a multi-slide presentation with interactive elements: flip cards, technology investment charts (recharts), a token predictor demo, prompt engineering techniques, and AI agent examples. All content is hardcoded as data arrays within the component.
-- **Day2** — Image and video generation studio. Toggle between Flash (image) and Veo (video) modes. Includes prompt enhancement via AI.
-- **Day3** — Chat interface with an AI career consultant. Uses multi-turn conversation history. Renders messages with `react-markdown`.
-- **Day4** — Business URL analysis. Submits a URL, Gemini analyzes it with search grounding, returns AI agent proposals with copyable system prompts.
+No test, lint, or formatting commands are configured.
 
 ## Environment Variables
 
 | Variable | Description |
 |---|---|
-| `GEMINI_API_KEY` | Google Gemini API key. Set in `.env.local` file. Vite exposes it as both `process.env.API_KEY` and `process.env.GEMINI_API_KEY`. |
+| `GEMINI_API_KEY` | Google Gemini API key. Set in `.env.local`. Vite exposes it as both `process.env.API_KEY` and `process.env.GEMINI_API_KEY` via `vite.config.ts` `define` block. |
+
+## Architecture
+
+### Routing
+
+Client-side routing via `useState<AppRoute>` in `App.tsx` — no router library. The `AppRoute` enum in `types.ts` defines: `HOME`, `DAY_1`, `DAY_2`, `DAY_3`, `DAY_4`, `AGENTS`. Day 3 is **not** a page — it redirects to an external HubSpot URL and returns to HOME.
+
+### App Wrapper
+
+`App.tsx` wraps everything in `AdminProvider` (context) and renders a `BackgroundGradient` animation behind all content. Vercel Analytics and SpeedInsights are included at the app root.
+
+### Unlock System (`utils/unlockSystem.ts`)
+
+Days are time-gated via `UNLOCK_SCHEDULE` — each day has a specific Madrid-timezone unlock time. The `isDayUnlocked()` function checks the schedule. An **admin bypass** exists: append `?admin=LH2026pro` to the URL to unlock all days for the session (persisted in sessionStorage).
+
+### Tracking System (`services/trackingService.ts`)
+
+Tracks user interactions per section (slide views, card flips, image generations, etc.) and triggers CTA popups when thresholds are met. Pushes events to GTM dataLayer. Counts stored in sessionStorage. An `AdminPanel` component (visible only to admins) shows live interaction counts.
+
+### AI Service Layer (`services/geminiService.ts`)
+
+All Gemini API calls are centralized here. Uses `getEnvClient()` which reads `process.env.API_KEY`. Key functions:
+
+| Function | Model | Purpose |
+|---|---|---|
+| `enhancePrompt()` | `gemini-2.5-flash` | Improves user prompts for image/video generation |
+| `enhanceAgentPrompt()` | `gemini-2.5-flash` | Generates system prompts from role/context/instruction |
+| `generateImage()` | `gemini-2.5-flash` | Generates images from text prompts |
+| `generateVideo()` | `veo-3.1-fast-generate-preview` | Generates videos with polling loop |
+| `sendConsultantMessage()` | `gemini-2.5-flash` | Multi-turn career consultant chat |
+| `analyzeBusiness()` | `gemini-2.5-flash` | Business analysis with Google Search grounding |
+
+### Shared Components
+
+- **`Layout`** — wraps every page. Sticky promo banner, optional back button + title header, footer.
+- **`CTAModal`** — promotional modal triggered after interaction thresholds. Links to the campaign URL.
+- **`BackgroundGradient`** — animated gradient background rendered behind all pages.
+- **`AdminPanel`** — floating debug panel (admin-only) showing interaction counts and CTA states.
+
+### Page Components
+
+- **`Home`** — Landing page with day navigation cards. Respects unlock schedule.
+- **`Day1`** (~1138 lines) — Multi-slide presentation with flip cards, recharts, token predictor demo, prompt engineering techniques. All slide data is inlined.
+- **`Day2`** — Image and video generation studio with prompt enhancement.
+- **`Day4`** — Business URL analysis. Gemini analyzes with search grounding, returns AI agent proposals.
+- **`AgentCatalog`** — Browsable catalog of pre-built AI agent templates with categories (work/personal), difficulty levels, and copyable system prompts. Data in `agentCatalogData.ts` and `agentMenuData.ts`.
+
+### Data Files
+
+- **`agentCatalogData.ts`** — Full agent catalog with system prompts, tags, difficulty, use cases.
+- **`agentMenuData.ts`** — Lighter agent templates for the Day 4 menu (work + personal categories).
+- **`constants.ts`** — Brand colors (`COLORS`), `IA_HEROES_CONTEXT` (course description injected into AI prompts), and system prompt templates.
 
 ## Conventions
 
@@ -99,35 +84,28 @@ Functions:
 - Variable names, component names, and code structure use **English**.
 
 ### Styling
-- All styling uses **Tailwind CSS utility classes** inline — there are no CSS files or CSS modules.
-- Brand colors are defined in `constants.ts` as `COLORS`: primary `#243F4C` (dark blue/teal), accent `#FF2878` (pink/magenta).
-- Responsive design uses Tailwind's `md:` breakpoint prefix throughout.
+- Tailwind CSS v4 via `@tailwindcss/vite` plugin (not CDN). Imported in `styles.css` with `@import "tailwindcss"`.
+- Custom animations (gradient, flip cards, float) defined in `styles.css` and `index.html` `<style>` block.
+- Brand colors in `constants.ts` as `COLORS`: primary `#243F4C` (dark teal), accent `#FF2878` (pink).
+- Responsive design via Tailwind's `md:` breakpoint.
 
 ### Component Patterns
 - Functional components with `React.FC<Props>` typing.
-- State management via `useState` and `useRef` (no external state library).
-- Props interfaces defined immediately above each component (e.g., `Day2Props`, `Day3Props`).
-- Each day component manages its own local state including loading, error, and CTA modal visibility.
-
-### TypeScript
-- Target: ES2022, JSX: `react-jsx`.
-- `noEmit: true` — TypeScript is used only for type checking; Vite handles transpilation.
-- `@ts-ignore` comments are used for `window.aistudio` API calls (AI Studio injected globals).
+- State via `useState` and `useRef` — no external state library.
+- Each day component manages its own loading, error, and CTA modal state.
+- `AdminContext` is the only React context — provides `isAdmin` boolean globally.
 
 ### AI Integration
-- All AI interactions go through `geminiService.ts` — never call the Gemini SDK directly from components.
-- System prompts are stored as template literals in `constants.ts`.
-- The `IA_HEROES_CONTEXT` constant contains the full course description and is injected into AI prompts as knowledge base context.
+- All AI interactions go through `services/geminiService.ts` — never call the Gemini SDK directly from components.
+- System prompts stored as template literals in `constants.ts`.
+- `IA_HEROES_CONTEXT` contains the full course description and is injected into prompts as knowledge base context.
 
 ## Key URLs
 
-- **Campaign CTA**: `https://live.learningheroes.com/iah-artefact` (used in Layout banner, CTAModal, Home page)
-- **AI Studio App**: `https://ai.studio/apps/fd0e1c54-f751-4805-8bce-3733554da1e8`
-- **OG Image**: `https://storage.googleapis.com/kisunexpublic/og%20LH.png`
+- **Campaign CTA**: `https://live.learningheroes.com/iah-artefact`
+- **Day 3 redirect**: `https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH14&utm_source=Live&utm_medium=artefacto&utm_content=day3`
+- **GTM Container**: `GTM-T9Z4CT8B`
 
-## Known Considerations
+## Deployment
 
-- `Day1.tsx` is very large (~1138 lines) with all slide data inlined. If refactoring, consider extracting slide data into a separate data file.
-- **Broken import paths:** `geminiService.ts` is at root but all imports reference it at `services/geminiService`. The file needs to be moved to `services/geminiService.ts` for local development to work. This is an artifact of the AI Studio export.
-- No tests, linting, or CI pipeline exist. Consider adding these if the project grows.
-- The `index.html` includes an import map for ESM CDN fallbacks alongside the Vite dev server — this is standard for AI Studio exported apps.
+Vercel with `vercel.json`: framework `vite`, build command `npm run build`, output `dist`.
