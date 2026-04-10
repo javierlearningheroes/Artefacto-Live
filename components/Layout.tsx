@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { COLORS } from '../constants';
 import { useAdmin } from '../contexts/AdminContext';
 import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
-import { isDayUnlocked } from '../utils/unlockSystem';
+import { isDayUnlocked, isVipBannerActive } from '../utils/unlockSystem';
 import { AppRoute } from '../types';
+
+const VIP_LANDING_URL = 'https://programas.learningheroes.com/IA-heroes/vip';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,6 +18,15 @@ const POST_EVENT_KEY = 'ia-heroes-post-event-shown';
 const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
   const { isAdmin } = useAdmin();
   const showHeader = !!title || !!onBack;
+
+  // ─── VIP banner window (active during Day 1 & Day 2) ──────────
+  const [isVipBanner, setIsVipBanner] = useState(() => isVipBannerActive());
+  useEffect(() => {
+    // Re-evaluate every minute so the banner flips automatically
+    // when the Day 3 unlock boundary is crossed without a page reload.
+    const interval = setInterval(() => setIsVipBanner(isVipBannerActive()), 60_000);
+    return () => clearInterval(interval);
+  }, []);
 
   // ─── Post-event popup (shows immediately on first visit) ──────
   const [showPostEvent, setShowPostEvent] = useState(false);
@@ -33,9 +44,20 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
 
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans text-slate-800">
-      {/* Sticky Promo Banner */}
-      <a href={buildCTAUrl('banner-post')} target="_blank" rel="noopener noreferrer" onClick={() => trackCTAClick('banner-post')} className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2" style={{ backgroundColor: COLORS.primary }}>
-        <span className="text-xs md:text-base truncate md:overflow-visible">🚀 ¿Quieres dominar la IA? Reserva tu llamada gratuita</span>
+      {/* Sticky Promo Banner — VIP landing during Day 1 & Day 2, reservation call otherwise */}
+      <a
+        href={isVipBanner ? VIP_LANDING_URL : buildCTAUrl('banner-post')}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => trackCTAClick(isVipBanner ? 'banner-vip' : 'banner-post')}
+        className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2"
+        style={{ backgroundColor: COLORS.primary }}
+      >
+        <span className="text-xs md:text-base truncate md:overflow-visible">
+          {isVipBanner
+            ? '⭐ Conviértete en VIP y desbloquea beneficios exclusivos'
+            : '🚀 ¿Quieres dominar la IA? Reserva tu llamada gratuita'}
+        </span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
         </svg>

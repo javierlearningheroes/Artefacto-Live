@@ -70,6 +70,10 @@ const UNLOCK_SCHEDULE: UnlockEntry[] = [
 // The CTA banner shares Day 3's unlock time (Wednesday 20:30h)
 export const CTA_BANNER_UNLOCK = UNLOCK_SCHEDULE[2].unlockUTC;
 
+// VIP landing banner window — active during Day 1 and Day 2
+// (from the event start on Mon 19:00h until Day 3 unlocks on Wed 20:30h Madrid)
+export const VIP_BANNER_END = UNLOCK_SCHEDULE[2].unlockUTC;
+
 // ============================================================
 // Public API
 // ============================================================
@@ -87,6 +91,16 @@ export function isDayUnlocked(dayId: AppRoute, isAdmin: boolean = false): boolea
 /** Check whether the CTA banner should be visible — always visible now */
 export function isCTABannerVisible(isAdmin: boolean = false): boolean {
   return true;
+}
+
+/**
+ * Whether the topbar should point to the VIP landing.
+ * Active during Day 1 and Day 2 of the event — from the start of the event
+ * until Day 3 unlocks on Wednesday at 20:30h Madrid.
+ */
+export function isVipBannerActive(): boolean {
+  const now = new Date();
+  return now >= EVENT_START && now < VIP_BANNER_END;
 }
 
 /** Get the human-readable unlock label for a day */
