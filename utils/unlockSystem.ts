@@ -95,12 +95,12 @@ export function isCTABannerVisible(isAdmin: boolean = false): boolean {
 
 /**
  * Whether the topbar should point to the VIP landing.
- * Active during Day 1 and Day 2 of the event — from the start of the event
- * until Day 3 unlocks on Wednesday at 20:30h Madrid.
+ * Active until Day 3 unlocks on Wednesday at 20:30h Madrid — i.e.
+ * pre-event, Day 1 and Day 2 show the VIP banner; Day 3 and Day 4 show
+ * the regular reserva-llamada banner.
  */
 export function isVipBannerActive(): boolean {
-  const now = new Date();
-  return now >= EVENT_START && now < VIP_BANNER_END;
+  return new Date() < VIP_BANNER_END;
 }
 
 /** Get the human-readable unlock label for a day */
