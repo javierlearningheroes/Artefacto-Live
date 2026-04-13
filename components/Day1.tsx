@@ -31,7 +31,7 @@ import {
 const SECTIONS = [
   { id: 'welcome', title: 'Bienvenida', icon: '🚀', color: '#FF2878' },
   { id: 'what-is-ai', title: '¿Qué es la IA?', icon: '🧠', color: '#6366f1' },
-  { id: 'claude', title: 'Claude', icon: '🤖', color: '#D97706' },
+  { id: 'claude', title: 'Claude', icon: '🤖', color: '#8B5CF6' },
   { id: 'prompting', title: 'Prompt Engineering', icon: '🗣️', color: '#61F2F2' },
   { id: 'salaries', title: 'Salarios', icon: '💰', color: '#FF2878' },
   { id: 'agent-demo', title: 'Demo en Vivo', icon: '⚡', color: '#ec4899' },
@@ -197,10 +197,10 @@ const claudeModels = [
     desc: 'Respuestas instantáneas para tareas simples y repetitivas. Ultra-eficiente en coste.',
     speed: 'Ultra-rápido',
     cost: '$',
-    color: 'from-emerald-400 to-teal-500',
-    bgLight: 'bg-emerald-50',
-    textColor: 'text-emerald-600',
-    borderColor: 'border-emerald-200',
+    color: 'from-cyan-500 to-cyan-600',
+    bgLight: 'bg-cyan-50',
+    textColor: 'text-cyan-600',
+    borderColor: 'border-cyan-200',
     analogy: 'El becario eficiente',
     examples: ['Clasificar emails', 'Extraer datos', 'Resúmenes cortos', 'Respuestas FAQ'],
   },
@@ -210,10 +210,10 @@ const claudeModels = [
     desc: 'El modelo del día a día. Balance perfecto entre calidad, velocidad y coste.',
     speed: 'Rápido',
     cost: '$$',
-    color: 'from-blue-500 to-indigo-600',
-    bgLight: 'bg-blue-50',
-    textColor: 'text-blue-600',
-    borderColor: 'border-blue-200',
+    color: 'from-pink-500 to-rose-600',
+    bgLight: 'bg-pink-50',
+    textColor: 'text-pink-600',
+    borderColor: 'border-pink-200',
     analogy: 'El especialista de confianza',
     examples: ['Crear contenido', 'Analizar informes', 'Programar', 'Atención al cliente'],
   },
@@ -223,10 +223,10 @@ const claudeModels = [
     desc: 'El más inteligente. Para razonamiento profundo y decisiones estratégicas.',
     speed: 'Profundo',
     cost: '$$$',
-    color: 'from-purple-500 to-violet-600',
-    bgLight: 'bg-purple-50',
-    textColor: 'text-purple-600',
-    borderColor: 'border-purple-200',
+    color: 'from-violet-500 to-purple-600',
+    bgLight: 'bg-violet-50',
+    textColor: 'text-violet-600',
+    borderColor: 'border-violet-200',
     analogy: 'El consultor senior',
     examples: ['Estrategia de negocio', 'Investigación compleja', 'Arquitectura técnica', 'Decisiones críticas'],
   },
@@ -246,7 +246,7 @@ const claudeFeatures = [
     name: 'Conectores',
     desc: 'Google Drive, Calendar, Gmail, Slack... + MCP para conectar CUALQUIER herramienta o base de datos propia.',
     icon: Plug,
-    color: 'from-cyan-500 to-blue-600',
+    color: 'from-cyan-500 to-cyan-600',
     bgLight: 'bg-cyan-50',
     textColor: 'text-cyan-600',
   },
@@ -254,9 +254,9 @@ const claudeFeatures = [
     name: 'Skills',
     desc: 'Capacidades especializadas pre-configuradas. Análisis, código, contenido — actívalas con un solo comando.',
     icon: Sparkles,
-    color: 'from-amber-500 to-orange-600',
-    bgLight: 'bg-amber-50',
-    textColor: 'text-amber-600',
+    color: 'from-pink-500 to-rose-600',
+    bgLight: 'bg-pink-50',
+    textColor: 'text-pink-600',
   },
   {
     name: 'Proyectos',
@@ -270,9 +270,9 @@ const claudeFeatures = [
     name: 'Cowork',
     desc: 'Centraliza y automatiza todo. Claude trabaja en segundo plano mientras tú avanzas en otras tareas.',
     icon: Users,
-    color: 'from-pink-500 to-rose-600',
-    bgLight: 'bg-pink-50',
-    textColor: 'text-pink-600',
+    color: 'from-rose-500 to-pink-600',
+    bgLight: 'bg-rose-50',
+    textColor: 'text-rose-600',
   },
 ];
 
@@ -883,7 +883,7 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
               {/* Header */}
               <div className="text-center mb-6">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Claude</span>: Tu Herramienta Completa
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF2878] to-[#6366f1]">Claude</span>: Tu Herramienta Completa
                 </h2>
                 <p className="text-lg text-slate-500 max-w-2xl mx-auto">
                   3 modelos, conectores ilimitados, skills y proyectos. Todo lo que necesitas en un solo lugar.
@@ -942,15 +942,15 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
               </div>
 
               {/* Tips */}
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5">
+              <div className="bg-gradient-to-r from-pink-50/80 to-violet-50/80 border border-pink-200/60 rounded-2xl p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Lightbulb className="w-5 h-5 text-amber-600" />
-                  <h4 className="font-bold text-amber-800">Tips para usar Claude como un pro</h4>
+                  <Lightbulb className="w-5 h-5 text-pink-600" />
+                  <h4 className="font-bold text-slate-800">Tips para usar Claude como un pro</h4>
                 </div>
                 <div className="grid md:grid-cols-2 gap-2">
                   {claudeTips.map((item, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm text-amber-700">
-                      <item.icon className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-500" />
+                    <div key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                      <item.icon className="w-4 h-4 flex-shrink-0 mt-0.5 text-pink-400" />
                       <span>{item.tip}</span>
                     </div>
                   ))}
