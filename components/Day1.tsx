@@ -20,7 +20,8 @@ import {
   Target, Lightbulb, TrendingUp, DollarSign,
   Bot, Database, Wrench, Zap, MessageSquare, Mail, Globe,
   Calendar, FileText, MessageCircle, ChevronDown, Eye, Copy,
-  BookOpen, Layers, Shield, Clock, Play, User, Send, Search
+  BookOpen, Layers, Shield, Clock, Play, User, Send, Search,
+  Plug, FolderOpen, Users
 } from 'lucide-react';
 
 // ════════════════════════════════════════════════════════════════
@@ -30,6 +31,7 @@ import {
 const SECTIONS = [
   { id: 'welcome', title: 'Bienvenida', icon: '🚀', color: '#FF2878' },
   { id: 'what-is-ai', title: '¿Qué es la IA?', icon: '🧠', color: '#6366f1' },
+  { id: 'claude', title: 'Claude', icon: '🤖', color: '#D97706' },
   { id: 'prompting', title: 'Prompt Engineering', icon: '🗣️', color: '#61F2F2' },
   { id: 'salaries', title: 'Salarios', icon: '💰', color: '#FF2878' },
   { id: 'agent-demo', title: 'Demo en Vivo', icon: '⚡', color: '#ec4899' },
@@ -182,6 +184,104 @@ const demoChatSteps = [
   { tool: 'user', icon: User, label: 'Usuario', action: 'Sí, por favor.', color: 'text-slate-500' },
   { tool: 'tool', icon: Calendar, label: 'Calendar Tool', action: 'Consulta disponibilidad → genera link de reserva.', color: 'text-cyan-500' },
   { tool: 'bot', icon: Bot, label: 'Agente', action: 'Aquí tienes mi calendario para elegir tu hora: cal.com/sonrisas', color: 'text-blue-500' },
+];
+
+// ════════════════════════════════════════════════════════════════
+// CLAUDE SECTION DATA
+// ════════════════════════════════════════════════════════════════
+
+const claudeModels = [
+  {
+    name: 'Haiku',
+    subtitle: 'El Rápido',
+    desc: 'Respuestas instantáneas para tareas simples y repetitivas. Ultra-eficiente en coste.',
+    speed: 'Ultra-rápido',
+    cost: '$',
+    color: 'from-emerald-400 to-teal-500',
+    bgLight: 'bg-emerald-50',
+    textColor: 'text-emerald-600',
+    borderColor: 'border-emerald-200',
+    analogy: 'El becario eficiente',
+    examples: ['Clasificar emails', 'Extraer datos', 'Resúmenes cortos', 'Respuestas FAQ'],
+  },
+  {
+    name: 'Sonnet',
+    subtitle: 'El Equilibrado',
+    desc: 'El modelo del día a día. Balance perfecto entre calidad, velocidad y coste.',
+    speed: 'Rápido',
+    cost: '$$',
+    color: 'from-blue-500 to-indigo-600',
+    bgLight: 'bg-blue-50',
+    textColor: 'text-blue-600',
+    borderColor: 'border-blue-200',
+    analogy: 'El especialista de confianza',
+    examples: ['Crear contenido', 'Analizar informes', 'Programar', 'Atención al cliente'],
+  },
+  {
+    name: 'Opus',
+    subtitle: 'El Experto',
+    desc: 'El más inteligente. Para razonamiento profundo y decisiones estratégicas.',
+    speed: 'Profundo',
+    cost: '$$$',
+    color: 'from-purple-500 to-violet-600',
+    bgLight: 'bg-purple-50',
+    textColor: 'text-purple-600',
+    borderColor: 'border-purple-200',
+    analogy: 'El consultor senior',
+    examples: ['Estrategia de negocio', 'Investigación compleja', 'Arquitectura técnica', 'Decisiones críticas'],
+  },
+];
+
+const taskScenarios = [
+  { task: '"Clasifica este email como urgente o no urgente"', model: 0, complexity: 'Baja' },
+  { task: '"Resume este artículo en 3 puntos clave"', model: 0, complexity: 'Baja' },
+  { task: '"Escribe un post de LinkedIn sobre liderazgo"', model: 1, complexity: 'Media' },
+  { task: '"Analiza este informe trimestral y dame insights"', model: 1, complexity: 'Media' },
+  { task: '"Diseña una estrategia de expansión a 3 países"', model: 2, complexity: 'Alta' },
+  { task: '"Analiza mi modelo de negocio y encuentra debilidades"', model: 2, complexity: 'Alta' },
+];
+
+const claudeFeatures = [
+  {
+    name: 'Conectores',
+    desc: 'Google Drive, Calendar, Gmail, Slack... + MCP para conectar CUALQUIER herramienta o base de datos propia.',
+    icon: Plug,
+    color: 'from-cyan-500 to-blue-600',
+    bgLight: 'bg-cyan-50',
+    textColor: 'text-cyan-600',
+  },
+  {
+    name: 'Skills',
+    desc: 'Capacidades especializadas pre-configuradas. Análisis, código, contenido — actívalas con un solo comando.',
+    icon: Sparkles,
+    color: 'from-amber-500 to-orange-600',
+    bgLight: 'bg-amber-50',
+    textColor: 'text-amber-600',
+  },
+  {
+    name: 'Proyectos',
+    desc: 'Combina modelo + conectores + skills + documentos de contexto. Como crear un agente especializado para cada área.',
+    icon: FolderOpen,
+    color: 'from-violet-500 to-purple-600',
+    bgLight: 'bg-violet-50',
+    textColor: 'text-violet-600',
+  },
+  {
+    name: 'Cowork',
+    desc: 'Centraliza y automatiza todo. Claude trabaja en segundo plano mientras tú avanzas en otras tareas.',
+    icon: Users,
+    color: 'from-pink-500 to-rose-600',
+    bgLight: 'bg-pink-50',
+    textColor: 'text-pink-600',
+  },
+];
+
+const claudeTips = [
+  { tip: 'Sé específico: cuanto más contexto le des, mejor será el resultado', icon: Target },
+  { tip: 'Usa Proyectos para no repetir instrucciones en cada conversación', icon: FolderOpen },
+  { tip: 'Empieza con Sonnet — sube a Opus solo cuando la tarea lo requiera', icon: TrendingUp },
+  { tip: 'Conecta tus herramientas para que Claude trabaje con datos reales', icon: Plug },
+  { tip: 'Itera siempre: la primera respuesta rara vez es la definitiva', icon: Sparkles },
 ];
 
 // ════════════════════════════════════════════════════════════════
@@ -396,6 +496,60 @@ const PrimingBuilder = () => {
           <p className="text-cyan-600 text-sm mt-1">Esta técnica es la base de todo buen prompt profesional.</p>
         </div>
       )}
+    </div>
+  );
+};
+
+// Task Matcher (Claude section)
+const TaskMatcher = () => {
+  const [activeTask, setActiveTask] = useState<number | null>(null);
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 md:p-6">
+      <div className="text-center mb-4">
+        <span className="inline-flex items-center gap-1 bg-slate-800 text-white text-xs font-bold px-3 py-1 rounded-full">
+          <Target className="w-3 h-3" /> ¿Qué modelo necesitas?
+        </span>
+        <p className="text-sm text-slate-500 mt-2">Haz clic en una tarea y descubre el modelo ideal</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
+        {taskScenarios.map((scenario, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveTask(activeTask === i ? null : i)}
+            className={`text-left p-3 rounded-xl border-2 transition-all text-sm ${
+              activeTask === i
+                ? `${claudeModels[scenario.model].borderColor} ${claudeModels[scenario.model].bgLight} shadow-md`
+                : 'border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            <span className="text-slate-700 font-mono text-xs">{scenario.task}</span>
+            {activeTask === i && (
+              <div className={`mt-2 text-xs font-bold ${claudeModels[scenario.model].textColor} flex items-center gap-1`}>
+                <CheckCircle className="w-3 h-3" />
+                Usa {claudeModels[scenario.model].name} — Complejidad {scenario.complexity}
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Complexity scale */}
+      <div className="flex items-center gap-2 justify-center pt-3 border-t border-slate-100">
+        <span className="text-[10px] text-slate-400 font-bold uppercase">Baja</span>
+        <div className="flex gap-1">
+          {claudeModels.map((m, i) => (
+            <div key={i} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+              activeTask !== null && taskScenarios[activeTask].model === i
+                ? `bg-gradient-to-r ${m.color} text-white shadow-md scale-110`
+                : 'bg-slate-100 text-slate-400'
+            }`}>
+              {m.name}
+            </div>
+          ))}
+        </div>
+        <span className="text-[10px] text-slate-400 font-bold uppercase">Alta</span>
+      </div>
     </div>
   );
 };
@@ -723,8 +877,90 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             </div>
           )}
 
-          {/* ═══════ SECTION 2: PROMPTING ═══════ */}
+          {/* ═══════ SECTION 2: CLAUDE ═══════ */}
           {activeSection === 2 && (
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600">Claude</span>: Tu Herramienta Completa
+                </h2>
+                <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+                  3 modelos, conectores ilimitados, skills y proyectos. Todo lo que necesitas en un solo lugar.
+                </p>
+              </div>
+
+              {/* 3 Model Cards */}
+              <div className="grid md:grid-cols-3 gap-4">
+                {claudeModels.map((model, i) => (
+                  <div key={i} className={`rounded-2xl border ${model.borderColor} overflow-hidden shadow-sm hover:shadow-md transition-shadow`}>
+                    <div className={`bg-gradient-to-r ${model.color} p-4 text-white`}>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-xl font-black">{model.name}</h3>
+                          <p className="text-sm opacity-90">{model.subtitle}</p>
+                        </div>
+                        <span className="text-2xl font-black opacity-60">{model.cost}</span>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-white space-y-3">
+                      <p className="text-sm text-slate-600">{model.desc}</p>
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ideal para:</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {model.examples.map((ex, j) => (
+                          <span key={j} className={`px-2 py-1 ${model.bgLight} ${model.textColor} rounded-lg text-xs font-bold`}>
+                            {ex}
+                          </span>
+                        ))}
+                      </div>
+                      <div className={`text-xs ${model.textColor} font-bold flex items-center gap-1 pt-1 border-t border-slate-100`}>
+                        <User className="w-3 h-3" />
+                        {model.analogy}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Task Matcher */}
+              <TaskMatcher />
+
+              {/* Ecosystem Features */}
+              <div>
+                <h3 className="text-xl font-black text-slate-800 mb-4 text-center">El Ecosistema Claude</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {claudeFeatures.map((feature, i) => (
+                    <div key={i} className={`${feature.bgLight} rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md transition-shadow`}>
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-3 shadow-md`}>
+                        <feature.icon className="w-5 h-5" />
+                      </div>
+                      <h4 className="font-bold text-sm text-slate-800 mb-1">{feature.name}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">{feature.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tips */}
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Lightbulb className="w-5 h-5 text-amber-600" />
+                  <h4 className="font-bold text-amber-800">Tips para usar Claude como un pro</h4>
+                </div>
+                <div className="grid md:grid-cols-2 gap-2">
+                  {claudeTips.map((item, i) => (
+                    <div key={i} className="flex items-start gap-2 text-sm text-amber-700">
+                      <item.icon className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-500" />
+                      <span>{item.tip}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ═══════ SECTION 3: PROMPTING ═══════ */}
+          {activeSection === 3 && (
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
@@ -785,8 +1021,8 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             </div>
           )}
 
-          {/* ═══════ SECTION 3: SALARIES ═══════ */}
-          {activeSection === 3 && (
+          {/* ═══════ SECTION 4: SALARIES ═══════ */}
+          {activeSection === 4 && (
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
@@ -852,8 +1088,8 @@ const Day1: React.FC<Day1Props> = ({ setRoute }) => {
             </div>
           )}
 
-          {/* ═══════ SECTION 4: AGENT DEMO ═══════ */}
-          {activeSection === 4 && (
+          {/* ═══════ SECTION 5: AGENT DEMO ═══════ */}
+          {activeSection === 5 && (
             <div className="space-y-6">
               <div className="text-center mb-4">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
