@@ -126,8 +126,8 @@ export function trackInteraction(type: InteractionType): string | null {
 
   // Check if any section threshold is now met
   for (const [sectionKey, config] of Object.entries(CTA_THRESHOLDS)) {
-    // Day 1 never triggers CTA popups
-    if (sectionKey === 'day1') continue;
+    // Day 1 and Day 2 never trigger CTA popups
+    if (sectionKey === 'day1' || sectionKey === 'day2') continue;
 
     // Skip if CTA already shown for this section
     if (ctaShownSections.has(sectionKey)) continue;
