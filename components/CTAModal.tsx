@@ -1,6 +1,6 @@
 import React from 'react';
 import { COLORS } from '../constants';
-import { trackCTAClick } from '../services/trackingService';
+import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
 
 interface CTAModalProps {
   isOpen: boolean;
@@ -14,7 +14,7 @@ interface CTAModalProps {
 const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, title, message, ctaUrl, ctaSource = 'generic' }) => {
   if (!isOpen) return null;
 
-  const url = ctaUrl || "https://live.learningheroes.com/iah-artefact";
+  const url = ctaUrl || buildCTAUrl(ctaSource);
 
   const handleCTAClick = () => {
     trackCTAClick(ctaSource);

@@ -166,11 +166,11 @@ export function trackCTAClick(source: string) {
  * Build the full CTA URL with UTM parameters
  */
 export function buildCTAUrl(trigger: string): string {
-  const baseUrl = 'https://programas.learningheroes.com/ia-heroes/reserva-llamada';
+  const baseUrl = 'https://3e81dfguwj9.typeform.com/ia-heroes';
   const params = new URLSearchParams({
     utm_campaign: 'IAH15',
-    utm_source: 'Live',
-    utm_medium: 'artefacto',
+    utm_source: 'Artefacto',
+    utm_medium: 'Live',
     utm_content: trigger,
   });
   return `${baseUrl}?${params.toString()}`;

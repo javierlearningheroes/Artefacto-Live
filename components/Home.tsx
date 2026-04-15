@@ -102,7 +102,7 @@ const Home: React.FC<HomeProps> = ({ setRoute }) => {
                 onClick={() => {
                   if (!unlocked) return;
                   if (day.id === AppRoute.DAY_3) {
-                    window.open('https://programas.learningheroes.com/ia-heroes/reserva-llamada?utm_campaign=IAH15&utm_source=Live&utm_medium=artefacto&utm_content=day3', '_blank');
+                    window.open(buildCTAUrl('day3'), '_blank');
                   } else if (day.id === AppRoute.DAY_4) {
                     setShowDay4Gate(true);
                   } else {
