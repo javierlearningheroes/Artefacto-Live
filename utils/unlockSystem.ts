@@ -74,6 +74,9 @@ export const CTA_BANNER_UNLOCK = UNLOCK_SCHEDULE[2].unlockUTC;
 // (from the event start on Mon 19:00h until Day 3 unlocks on Wed 20:30h Madrid)
 export const VIP_BANNER_END = UNLOCK_SCHEDULE[2].unlockUTC;
 
+// Promo banner does not appear at all until Wed 15 Apr 20:00h Madrid
+export const PROMO_BANNER_START = madridToUTC(2026, 4, 15, 20, 0);
+
 // ============================================================
 // Public API
 // ============================================================
@@ -88,9 +91,10 @@ export function isDayUnlocked(dayId: AppRoute, isAdmin: boolean = false): boolea
   return new Date() >= entry.unlockUTC;
 }
 
-/** Check whether the CTA banner should be visible — always visible now */
+/** Check whether the CTA banner should be visible — hidden until Wed 15 Apr 20:00h Madrid */
 export function isCTABannerVisible(isAdmin: boolean = false): boolean {
-  return true;
+  if (isAdmin) return true;
+  return new Date() >= PROMO_BANNER_START;
 }
 
 /**

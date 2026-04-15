@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { COLORS } from '../constants';
 import { useAdmin } from '../contexts/AdminContext';
 import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
-import { isDayUnlocked, isVipBannerActive } from '../utils/unlockSystem';
+import { isDayUnlocked, isCTABannerVisible } from '../utils/unlockSystem';
 import { AppRoute } from '../types';
-
-const VIP_LANDING_URL = 'https://3e81dfguwj9.typeform.com/ia-heroes?utm_campaign=IAH15&utm_source=Artefacto&utm_medium=Live';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -19,14 +17,16 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
   const { isAdmin } = useAdmin();
   const showHeader = !!title || !!onBack;
 
-  // ─── VIP banner window (active during Day 1 & Day 2) ──────────
-  const [isVipBanner, setIsVipBanner] = useState(() => isVipBannerActive());
+  // ─── Promo banner visibility (hidden until Wed 20:00h Madrid) ──
+  const [showBanner, setShowBanner] = useState(() => isCTABannerVisible(isAdmin));
   useEffect(() => {
     // Re-evaluate every minute so the banner flips automatically
-    // when the Day 3 unlock boundary is crossed without a page reload.
-    const interval = setInterval(() => setIsVipBanner(isVipBannerActive()), 60_000);
+    // when the 20:00h boundary is crossed without a page reload.
+    const interval = setInterval(() => {
+      setShowBanner(isCTABannerVisible(isAdmin));
+    }, 60_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isAdmin]);
 
   // ─── Post-event popup (shows immediately on first visit) ──────
   const [showPostEvent, setShowPostEvent] = useState(false);
@@ -44,31 +44,31 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
 
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans text-slate-800">
-      {/* Sticky Promo Banner — VIP landing during Day 1 & Day 2, reservation call otherwise */}
-      <a
-        href={isVipBanner ? VIP_LANDING_URL : buildCTAUrl('banner-post')}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => trackCTAClick(isVipBanner ? 'banner-vip' : 'banner-post')}
-        className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2"
-        style={{ backgroundColor: COLORS.primary }}
-      >
-        <span className="text-xs md:text-base truncate md:overflow-visible">
-          {isVipBanner
-            ? '📞 ¿Quieres dominar la IA? Reserva tu llamada gratuita'
-            : '🚀 ¿Quieres dominar la IA? Reserva tu llamada gratuita'}
-        </span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-        </svg>
-      </a>
+      {/* Sticky Promo Banner — reserva de llamada. Hidden until Wed 20:00h Madrid. */}
+      {showBanner && (
+        <a
+          href={buildCTAUrl('banner-post')}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackCTAClick('banner-post')}
+          className="sticky top-0 z-50 w-full text-center py-3 px-4 font-bold text-white shadow-md transition-colors hover:bg-opacity-90 flex items-center justify-center gap-2"
+          style={{ backgroundColor: COLORS.primary }}
+        >
+          <span className="text-xs md:text-base truncate md:overflow-visible">
+            🚀 ¿Quieres dominar la IA? Reserva tu llamada gratuita
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      )}
 
       {/* Floating Aula Virtual Button — always visible, top-right */}
       <a
         href="https://classroom.learningheroes.com/ia-heroes-15-ln?utm_source=artefacto&utm_medium=platform&utm_campaign=ia-heroes"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed right-3 md:right-5 z-50 flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-white text-xs md:text-sm font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-xl top-[56px] md:top-[58px]"
+        className={`fixed right-3 md:right-5 z-50 flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-white text-xs md:text-sm font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-xl ${showBanner ? 'top-[56px] md:top-[58px]' : 'top-2 md:top-3'}`}
         style={{ backgroundColor: COLORS.accent }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -80,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
 
       {/* Header */}
       {showHeader && (
-        <header className="bg-white border-b border-slate-200 py-3 px-4 md:py-4 md:px-6 flex items-center justify-between shadow-sm sticky z-40 top-[48px]">
+        <header className={`bg-white border-b border-slate-200 py-3 px-4 md:py-4 md:px-6 flex items-center justify-between shadow-sm sticky z-40 ${showBanner ? 'top-[48px]' : 'top-0'}`}>
           <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
             {onBack && (
               <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-100 text-slate-600 transition flex-shrink-0" aria-label="Volver">
