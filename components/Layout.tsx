@@ -5,7 +5,7 @@ import { trackCTAClick, buildCTAUrl } from '../services/trackingService';
 import { isDayUnlocked, isVipBannerActive } from '../utils/unlockSystem';
 import { AppRoute } from '../types';
 
-const VIP_LANDING_URL = 'https://programas.learningheroes.com/IA-heroes/vip';
+const VIP_LANDING_URL = 'https://3e81dfguwj9.typeform.com/ia-heroes?utm_campaign=IAH15&utm_source=Artefacto&utm_medium=Live';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -55,7 +55,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, onBack }) => {
       >
         <span className="text-xs md:text-base truncate md:overflow-visible">
           {isVipBanner
-            ? '⭐ Conviértete en VIP y desbloquea beneficios exclusivos'
+            ? '📞 ¿Quieres dominar la IA? Reserva tu llamada gratuita'
             : '🚀 ¿Quieres dominar la IA? Reserva tu llamada gratuita'}
         </span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
